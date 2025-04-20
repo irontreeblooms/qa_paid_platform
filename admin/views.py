@@ -1,0 +1,161 @@
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.utils.decorators import method_decorator
+from django.views import View
+import json
+from django.views.decorators.csrf import csrf_exempt
+from django.db.models import F
+import users.models
+from questions.models import Question,Answer
+from courses.models import Course
+from users.models import User
+from questions.serializers import QuestionSerializer, AnswerSerializer
+from users.serializers import UserSerializer
+from courses.serializers import CourseSerializer
+from django.shortcuts import get_object_or_404
+from django.utils.timezone import now
+from payments.models import Transaction
+
+# 管理员权限检查
+def is_admin(user):
+    return user.is_authenticated and user.is_admin
+
+@method_decorator(csrf_exempt, name='dispatch')
+class AuditQuestionView(View):
+    """审核问题"""
+
+    def get(self, request):
+        """获取所有待审核的问题"""
+        questions = Question.objects.filter(status='closed')
+        serializer = QuestionSerializer(questions, many=True)
+        return JsonResponse({'questions': serializer.data}, safe=False)
+
+    def post(self, request):
+        """审核通过或拒绝问题"""
+        try:
+            data = json.loads(request.body)  # 解析 JSON 数据
+            question_id = data.get('question_id')
+            new_status = data.get('status')
+        except json.JSONDecodeError:
+            return JsonResponse({'error': '请求体格式错误'}, status=400)
+
+        if not question_id:
+            return JsonResponse({'error': 'question_id 不能为空'}, status=400)
+
+        question = get_object_or_404(Question, id=question_id)
+
+        #审核通过后扣除发布者余额
+        user =  User.objects.filter(id=question.user_id).first()
+        if user.balance >= question.reward:
+            User.objects.filter(id=question.user_id).update(balance=F('balance') - question.reward)
+            # 创建交易记录
+            Transaction.objects.create(
+                user_id=question.user_id,
+                transaction_type="answer_income",
+                amount=question.reward,
+                description=f"发布问题（ID: {question.id}）支付",
+                created_at=now()
+            )
+        else:
+            return JsonResponse({'error': '该用户余额不足'}, status=400)
+
+        valid_statuses = dict(Question.STATUS_CHOICES).keys()
+
+        if new_status not in valid_statuses:
+            return JsonResponse({'error': '非法状态值'}, status=400)
+
+        question.status = new_status
+        question.save()
+        return JsonResponse({'message': '审核成功', 'status': question.status}, status=200)
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class AuditAnswerView(View):
+    """审核回答"""
+
+    def get(self, request):
+        """获取所有待审核的回答"""
+        answers = Answer.objects.filter(status='pending')
+        serializer = AnswerSerializer(answers, many=True)
+        return JsonResponse({'answers': serializer.data}, status=200)
+
+    def post(self, request):
+        """审核回答（通过/拒绝）"""
+        try:
+            data = json.loads(request.body)
+            answer_id = data.get('answer_id')
+            new_status = data.get('status')
+            # 确保 `status` 是合法的选项
+            valid_statuses = dict(Answer.STATUS_CHOICES).keys()
+            if new_status not in valid_statuses:
+                return JsonResponse({'error': '非法状态值'}, status=400)
+            answer = get_object_or_404(Answer, id=answer_id)
+            answer.status = new_status
+
+            #将奖励给予问题的回答者
+            question = Question.objects.filter(id = answer.question_id).first()
+            User.objects.filter(id=answer.user_id).update(balance=F('balance') + question.reward)
+
+            # 创建交易记录
+            from payments.models import Transaction
+            Transaction.objects.create(
+                user_id=answer.user_id,
+                transaction_type="answer_income",
+                amount=question.reward,
+                description=f"回答问题（ID: {question.id}）获得奖励",
+                created_at=now()
+            )
+
+            answer.save()
+
+            return JsonResponse({'message': '审核成功', 'status': answer.status}, status=200)
+        except json.JSONDecodeError:
+            return JsonResponse({'error': '请求格式错误'}, status=400)
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class AuditCourseView(View):
+    """审核课程"""
+    def get(self, request):
+        """获取所有待审核的课程"""
+        courses = Course.objects.filter(status='pending')
+        serializer = CourseSerializer(courses, many=True)
+        return JsonResponse({'courses': serializer.data}, status=200)
+
+    def post(self, request):
+        """审核通过或拒绝课程"""
+        try:
+            data = json.loads(request.body)
+            course_id = data.get('course_id')
+            new_status = data.get('status')
+
+            # 确保 `status` 是合法的选项
+            valid_statuses = dict(Course.STATUS_CHOICES).keys()
+            if new_status not in valid_statuses:
+                return JsonResponse({'error': '非法状态值'}, status=400)
+            course = get_object_or_404(Course, id=course_id)
+            course.status = new_status
+            course.save()
+
+            return JsonResponse({'message': '审核成功', 'status': course.status}, status=200)
+        except json.JSONDecodeError:
+            return JsonResponse({'error': '请求格式错误'}, status=400)
+
+
+class ManageUserView(View):
+    """管理用户"""
+
+    def get(self, request):
+        users = User.objects.all()
+        data = UserSerializer(users, many=True).data
+        return JsonResponse({'users': data})
+
+    def post(self, request):
+        """修改用户权限"""
+        data = json.loads(request.body)
+        user_id = data.get('user_id')
+        user = get_object_or_404(User, id=user_id)
+        data = json.loads(request.body)
+        user.is_superuser = data.get('is_superuser', user.is_superuser)
+        user.save()
+        return JsonResponse({'message': '用户权限更新成功', 'is_superuser': user.is_superuser})

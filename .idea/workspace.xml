@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="57fedd76-88f0-4418-8057-1b958ec108d3" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)">
+    <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+        <option value="Python Script" />
+        <option value="Vue Single File Component" />
+      </list>
+    </option>
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2uNhy1U7m4g1JhPrATRCRbuZ7CV" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DatabaseDriversLRU" value="mysql" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Downloads/django_cors_headers-4.7.0-py3-none-any.whl" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\SY2\PycharmProjects\djangoProject2" />
+      <recent name="C:\Users\SY2\PycharmProjects\djangoProject2\frontend1\frontend\src\stores" />
+      <recent name="C:\Users\SY2\PycharmProjects\djangoProject2\frontend\frontend\src\components\common" />
+      <recent name="C:\Users\SY2\PycharmProjects\djangoProject2\frontend\frontend\src\components\layout" />
+      <recent name="C:\Users\SY2\PycharmProjects\djangoProject2\frontend\frontend\src\pages" />
+    </key>
+  </component>
+  <component name="RunManager" selected="npm.serve">
+    <configuration name="tests" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="djangoProject2" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/users" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/users/tests.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="djangoProject2" type="Python.DjangoServer" factoryName="Django server">
+      <module name="djangoProject2" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+        <env name="DJANGO_SETTINGS_MODULE" value="djangoProject2.settings" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Users\SY2\PycharmProjects\pythonProject5\venv\Scripts\python.exe" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <option name="port" value="8000" />
+      <option name="host" value="" />
+      <option name="additionalOptions" value="" />
+      <option name="browserUrl" value="" />
+      <option name="runTestServer" value="false" />
+      <option name="runNoReload" value="false" />
+      <option name="useCustomRunCommand" value="false" />
+      <option name="customRunCommand" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="serve" type="js.build_tools.npm" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/frontend1/frontend/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="serve" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Django 服务器.djangoProject2" />
+      <item itemvalue="npm.serve" />
+      <item itemvalue="Python.tests" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.tests" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="57fedd76-88f0-4418-8057-1b958ec108d3" name="Changes" comment="" />
+      <created>1742095189549</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1742095189549</updated>
+      <workItem from="1742095192547" duration="35000" />
+      <workItem from="1742104181995" duration="3863000" />
+      <workItem from="1742111569457" duration="4000" />
+      <workItem from="1742111580912" duration="8841000" />
+      <workItem from="1742183332753" duration="16933000" />
+      <workItem from="1742266715037" duration="12101000" />
+      <workItem from="1742361335815" duration="9567000" />
+      <workItem from="1742378384520" duration="924000" />
+      <workItem from="1742446907727" duration="770000" />
+      <workItem from="1742525229900" duration="7436000" />
+      <workItem from="1742540016443" duration="128000" />
+      <workItem from="1742540162576" duration="5584000" />
+      <workItem from="1742624067140" duration="9615000" />
+      <workItem from="1742699490891" duration="9879000" />
+      <workItem from="1742990059828" duration="609000" />
+      <workItem from="1743052164073" duration="11200000" />
+      <workItem from="1743064844731" duration="25000" />
+      <workItem from="1743065044287" duration="481000" />
+      <workItem from="1743065561118" duration="1176000" />
+      <workItem from="1743066763893" duration="4594000" />
+      <workItem from="1743130420004" duration="1690000" />
+      <workItem from="1743138441093" duration="5658000" />
+      <workItem from="1743214487018" duration="4219000" />
+      <workItem from="1743219185415" duration="14484000" />
+      <workItem from="1743297572749" duration="19649000" />
+      <workItem from="1743330431632" duration="1897000" />
+      <workItem from="1743336980864" duration="292000" />
+      <workItem from="1743337297593" duration="3856000" />
+      <workItem from="1743387919658" duration="12864000" />
+      <workItem from="1743480403044" duration="10089000" />
+      <workItem from="1743506603869" duration="1550000" />
+      <workItem from="1743510045744" duration="1744000" />
+      <workItem from="1743514605610" duration="4568000" />
+      <workItem from="1743562866349" duration="2502000" />
+      <workItem from="1743585174051" duration="1028000" />
+      <workItem from="1743592388073" duration="296000" />
+      <workItem from="1743592707085" duration="213000" />
+      <workItem from="1743605737646" duration="3378000" />
+      <workItem from="1743647120611" duration="4584000" />
+      <workItem from="1743651778357" duration="1686000" />
+      <workItem from="1743667852147" duration="13196000" />
+      <workItem from="1743693138306" duration="2166000" />
+      <workItem from="1743732246956" duration="6537000" />
+      <workItem from="1743749481604" duration="4682000" />
+      <workItem from="1743754320026" duration="5439000" />
+      <workItem from="1743906012956" duration="3866000" />
+      <workItem from="1744007916299" duration="445000" />
+      <workItem from="1744023927369" duration="1512000" />
+      <workItem from="1744422322592" duration="4304000" />
+      <workItem from="1744532527929" duration="4219000" />
+      <workItem from="1744611359285" duration="6347000" />
+      <workItem from="1745031233895" duration="4939000" />
+      <workItem from="1745125316735" duration="4436000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/djangoProject2$tests.coverage" NAME="tests 覆盖结果" MODIFIED="1743061459251" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/users" />
+  </component>
+</project>
