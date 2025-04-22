@@ -95,7 +95,7 @@ def user_detail(request):
         "industry": user.industry,
         "gender": user.gender
     }
-    1(user_data)
+    return JsonResponse(user_data)
 
 
 # 通用修改用户信息的 API
