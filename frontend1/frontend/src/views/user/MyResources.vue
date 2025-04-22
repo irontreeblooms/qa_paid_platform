@@ -46,6 +46,7 @@
                   <p class="question-content">悬赏：{{ question.reward }} ｜ 状态：{{ question.status }}</p>
                 </div>
                 <el-button type="primary" @click="openQuestionDialog(question)">查看详情</el-button>
+                <el-button type="primary" @click="openQuestionDialog(question)">撤销发布</el-button>
               </div>
             </el-card>
             <el-empty v-if="questions.length === 0" description="暂无发布问题" />

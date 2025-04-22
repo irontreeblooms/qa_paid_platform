@@ -5,7 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="57fedd76-88f0-4418-8057-1b958ec108d3" name="Changes" comment="Changes">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/djangoProject2/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/djangoProject2/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend1/frontend/src/views/Home.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend1/frontend/src/views/Home.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend1/frontend/src/views/course/course.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend1/frontend/src/views/course/course.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend1/frontend/src/views/user/MyResources.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend1/frontend/src/views/user/MyResources.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/users/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/users/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/users/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,7 +73,7 @@
       <recent name="C:\Users\SY2\PycharmProjects\djangoProject2\frontend\frontend\src\pages" />
     </key>
   </component>
-  <component name="RunManager" selected="Django 服务器.djangoProject2">
+  <component name="RunManager" selected="npm.serve">
     <configuration name="tests" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="djangoProject2" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -196,7 +202,8 @@
       <workItem from="1744611359285" duration="6347000" />
       <workItem from="1745031233895" duration="4939000" />
       <workItem from="1745125316735" duration="5463000" />
-      <workItem from="1745291639295" duration="4261000" />
+      <workItem from="1745291639295" duration="4515000" />
+      <workItem from="1745309304941" duration="5426000" />
     </task>
     <task id="LOCAL-00001" summary="Changes">
       <created>1745130728368</created>
@@ -212,7 +219,14 @@
       <option name="project" value="LOCAL" />
       <updated>1745300787724</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Changes">
+      <created>1745301406551</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1745301406551</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

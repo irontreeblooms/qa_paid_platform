@@ -29,4 +29,6 @@ urlpatterns = [
     path('user/logout/', views.logout, name='user_logout'),
     path('user/my-courses/', views.purchased_courses, name='my_courses'),
     path('user/my-questions/', views.my_questions, name='my_questions'),
+    path('send-code/', views.SendCodeView.as_view()),
+    path('register/', views.RegisterView.as_view()),
 ]

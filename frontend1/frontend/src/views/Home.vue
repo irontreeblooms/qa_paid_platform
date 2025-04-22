@@ -45,7 +45,7 @@
                   <el-icon><User /></el-icon>钱包
                 </el-dropdown-item>
                 <el-dropdown-item command="resource">
-                  <el-icon><Setting /></el-icon>我的资源
+                  <el-icon><FolderOpened /></el-icon>我的资源
                 </el-dropdown-item>
                 <el-dropdown-item divided command="logout">
                   <el-icon><SwitchButton /></el-icon>退出登录
@@ -134,7 +134,7 @@ import {
 import {
   Search,
   User,
-  Setting,
+  FolderOpened,
   SwitchButton,
   ChatDotRound,
   View

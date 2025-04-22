@@ -1,24 +1,20 @@
 import datetime
 from django.contrib.sessions.models import Session
-from django.contrib.auth.models import User
-from django import forms
+from django.utils.decorators import method_decorator
 from django.views import View
 import jwt
-
-from payments.models import Transaction
 from questions.models import Question
-from users import models
-from users.models import User, PurchaseRecord
-from django.shortcuts import get_object_or_404, redirect, render
+from users.models import PurchaseRecord, User
+from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login
 from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import get_object_or_404
-from users.models import User
 import json
-
-from users.serializers import PurchasedCourseSerializer
+import random
+from django.core.cache import cache
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 @csrf_exempt
@@ -163,6 +159,71 @@ def my_questions(request):
     ]
 
     return JsonResponse({'my_questions': question_list})
+
+
+#发送验证码
+@method_decorator(csrf_exempt, name='dispatch')
+class SendCodeView(View):
+    def post(self, request):
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "无效的 JSON 数据"}, status=400)
+
+        email = data.get("email")
+        if not email:
+            return JsonResponse({"error": "邮箱不能为空"}, status=400)
+
+        code = ''.join([str(random.randint(0, 9)) for _ in range(6)])
+        cache.set(f'register_code_{email}', code, timeout=300)
+
+        try:
+            send_mail(
+                subject="验证码通知",
+                message=f"您的验证码是：{code}，5分钟内有效。",
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[email],
+                fail_silently=False
+            )
+            return JsonResponse({"message": "验证码发送成功"})
+        except Exception as e:
+            return JsonResponse({"error": "发送失败"}, status=500)
+
+
+#注册用户
+@method_decorator(csrf_exempt, name='dispatch')
+class RegisterView(View):
+    def post(self, request):
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "无效的 JSON 数据"}, status=400)
+
+        username = data.get("username")
+        password = data.get("password")
+        email = data.get("email")
+        code = data.get("code")
+
+        if not all([username, password, email, code]):
+            return JsonResponse({"error": "请填写所有字段"}, status=400)
+
+        cached_code = cache.get(f'register_code_{email}')
+        if cached_code != code:
+            return JsonResponse({"error": "验证码错误或已过期"}, status=400)
+
+        if User.objects.filter(username=username).exists():
+            return JsonResponse({"error": "用户名已存在"}, status=400)
+
+        if User.objects.filter(email=email).exists():
+            return JsonResponse({"error": "邮箱已注册"}, status=400)
+
+        User.objects.create_user(username=username, email=email, password=password)
+        cache.delete(f'register_code_{email}')
+        return JsonResponse({"message": "注册成功"})
+
+
+
+
 
 
 def JwtTest(request):

@@ -45,7 +45,7 @@
                   <el-icon><User /></el-icon>钱包
                 </el-dropdown-item>
                 <el-dropdown-item command="resource">
-                  <el-icon><Setting /></el-icon>我的资源
+                  <el-icon><FolderOpened /></el-icon>我的资源
                 </el-dropdown-item>
                 <el-dropdown-item divided command="logout">
                   <el-icon><SwitchButton /></el-icon>退出登录
@@ -147,7 +147,7 @@ import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 import { ElMessage } from 'element-plus';
-import { Search, User, Setting, SwitchButton, Loading } from '@element-plus/icons-vue';
+import { Search, User, FolderOpened, SwitchButton, Loading } from '@element-plus/icons-vue';
 import Cookies from "js-cookie";
 
 
