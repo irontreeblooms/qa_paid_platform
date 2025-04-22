@@ -44,7 +44,7 @@
                 <el-dropdown-item command="wallet">
                   <el-icon><User /></el-icon>钱包
                 </el-dropdown-item>
-                <el-dropdown-item command="source">
+                <el-dropdown-item command="resource">
                   <el-icon><Setting /></el-icon>我的资源
                 </el-dropdown-item>
                 <el-dropdown-item divided command="logout">
@@ -225,8 +225,8 @@ const handleUserCommand = (command) => {
     case 'profile':
       router.push({ name: 'profile' })
       break
-    case 'source':
-      router.push('/source')
+    case 'resource':
+      router.push('/resource')
       break
     case 'wallet':
       router.push('/wallet')
