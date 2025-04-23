@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="57fedd76-88f0-4418-8057-1b958ec108d3" name="Changes" comment="Changes">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend1/frontend/src/views/course/course.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend1/frontend/src/views/course/course.vue" afterDir="false" />
-    </list>
+    <list default="true" id="57fedd76-88f0-4418-8057-1b958ec108d3" name="Changes" comment="Changes" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -199,7 +196,7 @@
       <workItem from="1745125316735" duration="5463000" />
       <workItem from="1745291639295" duration="4515000" />
       <workItem from="1745309304941" duration="5607000" />
-      <workItem from="1745372175431" duration="5506000" />
+      <workItem from="1745372175431" duration="5854000" />
     </task>
     <task id="LOCAL-00001" summary="Changes">
       <created>1745130728368</created>
@@ -236,7 +233,14 @@
       <option name="project" value="LOCAL" />
       <updated>1745377752075</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Changes">
+      <created>1745378730339</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1745378730339</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
