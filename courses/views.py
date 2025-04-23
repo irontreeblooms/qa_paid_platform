@@ -31,7 +31,7 @@ class CourseView(View):
         ).order_by('-created_at')  # 按创建时间倒序排列
 
         # 分页功能
-        paginator = Paginator(courses, 10)  # 每页10条数据
+        paginator = Paginator(courses, 12)
         page_obj = paginator.get_page(page)  # 获取当前页的数据
 
         # 使用序列化器来序列化课程数据

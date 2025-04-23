@@ -140,6 +140,7 @@
         :page-size="pageSize"
         :total="totalCourses"
         @current-change="loadCourses"
+        class="pagination"
       />
 </div>
 
@@ -169,7 +170,7 @@ const loading = ref(false);
 const currentPage = ref(1); // 当前页码
 const totalCourses = ref(0); // 总记录数
 const totalPages = ref(0); // 总页数
-const pageSize = ref(10); // 每页记录数
+const pageSize = ref(12); // 每页记录数
 
 // 加载课程数据
 const loadCourses = async (page = 1) => {
@@ -288,9 +289,10 @@ const handleLogout = async () => {
 
 
 
+
 // 处理搜索
 const handleSearch = () => {
-  ElMessage.info(`搜索关键词：${searchKeyword.value}`);
+  loadCourses(1, searchKeyword.value); // 搜索时从第一页开始
 };
 
 //课程封面上传
@@ -573,5 +575,8 @@ onMounted(() => {
     font-size: 16px;
   }
 }
-
+.pagination {
+  margin-top: 32px;
+  justify-content: center;
+}
 </style>
