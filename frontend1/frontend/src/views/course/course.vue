@@ -132,6 +132,15 @@
       </div>
     </div>
   </div>
+  <!-- 分页控件 -->
+      <el-pagination
+        v-if="totalPages > 1"
+        layout="prev, pager, next"
+        :current-page="currentPage"
+        :page-size="pageSize"
+        :total="totalCourses"
+        @current-change="loadCourses"
+      />
 </div>
 
 <el-empty v-else description="暂无课程数据" />
@@ -149,6 +158,38 @@ import { ElMessage } from 'element-plus';
 import { Search, User, FolderOpened, SwitchButton, Loading } from '@element-plus/icons-vue';
 import Cookies from "js-cookie";
 
+const router = useRouter();
+
+
+// 响应式数据
+const activeNav = ref('course');
+const searchKeyword = ref('');
+const courses = ref([]);
+const loading = ref(false);
+const currentPage = ref(1); // 当前页码
+const totalCourses = ref(0); // 总记录数
+const totalPages = ref(0); // 总页数
+const pageSize = ref(10); // 每页记录数
+
+// 加载课程数据
+const loadCourses = async (page = 1) => {
+  try {
+    loading.value = true;
+    currentPage.value = page;
+    const response = await axios.get("http://127.0.0.1:8000/api/courses/list/", {
+      params: { page },
+    });
+
+    courses.value = response.data.courses;
+    totalCourses.value = response.data.count;
+    totalPages.value = response.data.num_pages;
+  } catch (error) {
+    ElMessage.error("加载课程失败");
+    console.error("API Error:", error);
+  } finally {
+    loading.value = false;
+  }
+};
 
 
 const uploadDialogVisible = ref(false);
@@ -190,17 +231,6 @@ const submitUpload = async () => {
   }
 };
 
-
-
-
-// Vue Router
-const router = useRouter();
-
-// 响应式数据
-const activeNav = ref('course');
-const searchKeyword = ref('');
-const courses = ref([]);
-const loading = ref(false);
 
 // 用户数据（模拟）
 const user = ref({
@@ -257,19 +287,6 @@ const handleLogout = async () => {
 }
 
 
-// 加载课程数据
-const loadCourses = async () => {
-  try {
-    loading.value = true;
-    const response = await axios.get('http://127.0.0.1:8000/api/courses/list/');
-    courses.value = response.data.courses;
-  } catch (error) {
-    ElMessage.error('加载课程失败');
-    console.error('API Error:', error);
-  } finally {
-    loading.value = false;
-  }
-};
 
 // 处理搜索
 const handleSearch = () => {
