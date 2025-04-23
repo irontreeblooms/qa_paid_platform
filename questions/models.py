@@ -11,7 +11,8 @@ class Tag(models.Model):
 class Question(models.Model):
     STATUS_CHOICES = [
         ('open', '开放中'),
-        ('closed', '审核中'),
+        ('closed', '关闭显示'),
+        ('pending', '审核中'),
         ('false', '审核失败'),
         ('answered', '已回答'),
     ]
@@ -19,7 +20,7 @@ class Question(models.Model):
     title = models.CharField(max_length=255)  # 标题
     content = models.TextField()              # 问题描述
     reward = models.DecimalField(max_digits=10, decimal_places=2, default=0)  # 悬赏金额
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='closed')  # 问题状态
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')  # 问题状态
     created_at = models.DateTimeField(auto_now_add=True)  # 创建时间
     updated_at = models.DateTimeField(auto_now=True)      # 更新时间
 

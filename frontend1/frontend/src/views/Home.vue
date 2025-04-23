@@ -154,7 +154,7 @@ const searchKeyword = ref('')
 const questions = ref([])
 const loading = ref(false)
 const currentPage = ref(1)
-const pageSize = ref(15)
+const pageSize = ref(10)
 const totalCount = ref(0)
 const user = ref({
   avatar: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',

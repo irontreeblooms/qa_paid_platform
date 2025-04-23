@@ -9,15 +9,40 @@ from users.models import User, PurchaseRecord
 from payments.models import Transaction
 from django.db.models import F
 from courses.serializers import CourseSerializer
+from django.core.paginator import Paginator
+from django.db.models import Q
 
 @method_decorator(csrf_exempt, name='dispatch')
 class CourseView(View):
     def get(self, request):
-        """获取课程列表"""
-        courses = Course.objects.filter(status="approved").order_by('-created_at')
-        data = [{"id": c.id, "title": c.title, "description": c.description,
-                 "price": str(c.price), "video": c.video.url if c.video else None,"cover": c.cover.url if c.cover else None} for c in courses]
-        return JsonResponse({"courses": data})
+        """获取课程列表（支持分页 + 搜索）"""
+
+        # 获取搜索参数和页码
+        search = request.GET.get('search', '')  # 获取搜索参数
+        try:
+            page = int(request.GET.get('page', 1))  # 获取当前页码，默认为1
+        except ValueError:
+            return JsonResponse({'error': 'Invalid page number'}, status=400)
+
+        # 查询课程，支持模糊搜索课程标题和描述，并且只查询审核通过的课程
+        courses = Course.objects.filter(
+            Q(title__icontains=search) | Q(description__icontains=search),  # 模糊搜索标题和描述
+            status='approved'  # 只查询审核通过的课程
+        ).order_by('-created_at')  # 按创建时间倒序排列
+
+        # 分页功能
+        paginator = Paginator(courses, 10)  # 每页10条数据
+        page_obj = paginator.get_page(page)  # 获取当前页的数据
+
+        # 使用序列化器来序列化课程数据
+        data = CourseSerializer(page_obj, many=True).data
+
+        return JsonResponse({
+            'courses': data,  # 返回序列化后的课程数据
+            'count': paginator.count,  # 总记录数
+            'num_pages': paginator.num_pages,  # 总页数
+            'current_page': page_obj.number  # 当前页码
+        })
 
     def post(self, request):
         """上传课程"""

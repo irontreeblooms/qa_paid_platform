@@ -105,7 +105,6 @@
 
 
 
-    <!-- 课程内容区域 -->
 <!-- 课程内容区域 -->
 <div v-if="loading" class="loading">
   <el-icon><Loading /></el-icon> 加载中...
