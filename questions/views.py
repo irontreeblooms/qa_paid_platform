@@ -9,6 +9,10 @@ from .models import Question, Answer
 from .serializers import QuestionSerializer, AnswerSerializer
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
+from django.utils.timezone import now
+from django.db.models import F
+from users.models import User
+from payments.models import Transaction
 
 @method_decorator(csrf_exempt, name='dispatch')
 class QuestionListView(View):
@@ -38,26 +42,45 @@ class QuestionListView(View):
         data = json.loads(request.body)
         data['user'] = request.user.id
         serializer = QuestionSerializer(data=data)
+
         if serializer.is_valid() and request.user.is_authenticated:
             print(data)
+            user = User.objects.filter(id=data['user']).first()
+            if user.balance >= data['reward']:
+                User.objects.filter(id=data['user']).update(balance=F('balance') - data['reward'])
+                # 创建交易记录
+
+                Transaction.objects.create(
+                    user_id=data['user'],
+                    transaction_type="question_reply",
+                    amount=data['reward'],
+                    description=f"发布问题（标题: {data['title']}）支付",
+                    created_at=now()
+                )
+            else:
+                return JsonResponse({'error': '该用户余额不足'}, status=400)
             serializer.save()
             return JsonResponse(serializer.data, status=201)
         else:
             return JsonResponse(serializer.errors, status=401)
 
 
-
 @method_decorator(csrf_exempt, name='dispatch')
 class QuestionDetailView(View):
-    def get(self, request, pk ):
+    def get(self, request, pk):
         """获取问题详情"""
-        question = Question.objects.filter(pk=pk).first()
+        question = get_object_or_404(Question, pk=pk)
         data = QuestionSerializer(question).data
         return JsonResponse(data)
 
     def put(self, request, pk):
         """更新问题"""
         question = get_object_or_404(Question, pk=pk)
+
+        # 权限校验
+        if question.user != request.user:
+            return JsonResponse({'error': ('无权限更新该问题')}, status=403)
+
         data = json.loads(request.body)
         serializer = QuestionSerializer(question, data=data, partial=True)
         if serializer.is_valid():
@@ -68,8 +91,13 @@ class QuestionDetailView(View):
     def delete(self, request, pk):
         """删除问题"""
         question = get_object_or_404(Question, pk=pk)
+
+        # 权限校验，确保只有创建者能删除该问题
+        if question.status == "pending":
+            return JsonResponse({'error': '请先撤销发布该问题后再删除'}, status=403)
+
         question.delete()
-        return JsonResponse({'message': 'Question deleted'}, status=204)
+        return JsonResponse({'message': '问题已成功删除'}, status=204)
 
 
 @method_decorator(csrf_exempt, name='dispatch')

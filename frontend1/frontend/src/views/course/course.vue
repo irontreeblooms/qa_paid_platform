@@ -134,11 +134,12 @@
   </div>
   <!-- 分页控件 -->
       <el-pagination
-        v-if="totalPages > 1"
-        layout="prev, pager, next"
-        :current-page="currentPage"
+        v-model:current-page="currentPage"
         :page-size="pageSize"
         :total="totalCourses"
+        :pager-count="5"
+        layout="prev, pager, next, jumper"
+        background
         @current-change="loadCourses"
         class="pagination"
       />
@@ -482,14 +483,14 @@ onMounted(() => {
 /* 课程容器 */
 .course-container {
   max-width: 1280px;
-  margin: 100px auto 40px;
+  margin: 100px auto 30px;
   padding: 0 20px;
 }
 
 /* 课程网格布局 */
 .course-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 24px;
   justify-content: center;
 }

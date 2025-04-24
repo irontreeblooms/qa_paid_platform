@@ -11,7 +11,8 @@ class Transaction(models.Model):
         ("answer_income", "回答收入"),  # 用户因回答问题获得的赏金
         ("course_purchase", "购买课程"),  # 用户购买课程的支出
         ("course_income", "课程收入"),  # 用户上传的课程被购买后的收入
-        ("question_reply", "问题回复支出"),  # 用户发布的问题被回答后的赏金支出
+        ("question_reply", "问题支出"),  # 用户发布的问题的赏金支出
+        ("other_income", "其它收入"),  # 其他收入
     ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="transactions")

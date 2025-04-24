@@ -26,7 +26,7 @@ class AuditQuestionView(View):
 
     def get(self, request):
         """获取所有待审核的问题"""
-        questions = Question.objects.filter(status='closed')
+        questions = Question.objects.filter(status='pending')
         serializer = QuestionSerializer(questions, many=True)
         return JsonResponse({'questions': serializer.data}, safe=False)
 
@@ -44,20 +44,17 @@ class AuditQuestionView(View):
 
         question = get_object_or_404(Question, id=question_id)
 
-        #审核通过后扣除发布者余额
-        user =  User.objects.filter(id=question.user_id).first()
-        if user.balance >= question.reward:
-            User.objects.filter(id=question.user_id).update(balance=F('balance') - question.reward)
+        if new_status == "false":
+            #审核不通过退余额
+            User.objects.filter(id=question.user_id).update(balance=F('balance') + question.reward)
             # 创建交易记录
             Transaction.objects.create(
                 user_id=question.user_id,
-                transaction_type="answer_income",
+                transaction_type="other_income",
                 amount=question.reward,
-                description=f"发布问题（ID: {question.id}）支付",
+                description=f"发布问题（ID: {question.id}）失败",
                 created_at=now()
             )
-        else:
-            return JsonResponse({'error': '该用户余额不足'}, status=400)
 
         valid_statuses = dict(Question.STATUS_CHOICES).keys()
 

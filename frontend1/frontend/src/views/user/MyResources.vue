@@ -46,7 +46,9 @@
                   <p class="question-content">悬赏：{{ question.reward }} ｜ 状态：{{ question.status }}</p>
                 </div>
                 <el-button type="primary" @click="openQuestionDialog(question)">查看详情</el-button>
-                <el-button type="primary" @click="openQuestionDialog(question)">撤销发布</el-button>
+                <el-button v-if="question.status === 'pending' || question.status === 'open'" type="danger" :loading="question.loading" @click="revokeQuestion(question)">撤销发布</el-button>
+                <el-button v-if="question.status === 'closed'" type="primary" :loading="question.loading" @click="republishQuestion(question)">重新发布</el-button>
+                <el-button v-if="question.status !== 'open' && question.status !== 'pending'"  type="danger" @click="deleteQuestion(question)">删除问题</el-button>
               </div>
             </el-card>
             <el-empty v-if="questions.length === 0" description="暂无发布问题" />
@@ -91,6 +93,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
+import {ElMessage} from "element-plus";
 
 const activeTab = ref('courses')
 
@@ -120,6 +123,73 @@ function openCourseDialog(course) {
 function openQuestionDialog(question) {
   questionDetail.value = question
   questionDialogVisible.value = true
+}
+
+function revokeQuestion(question) {
+  // 设置加载状态，防止重复点击
+  question.loading = true;
+
+  // 发送请求，将状态更新为 'closed' 或 'revoked'
+  axios
+    .put(`http://127.0.0.1:8000/api/questions/question/detail/${question.id}/`, { status: 'closed' })
+    .then(() => {
+      ElMessage.success('撤销发布成功');
+      // 更新问题状态为 'closed'
+      question.status = 'closed';
+    })
+    .catch(err => {
+      console.error('撤销发布失败:', err);
+      ElMessage.error('撤销发布失败，请稍后重试');
+    })
+    .finally(() => {
+      // 恢复按钮状态
+      question.loading = false;
+    });
+}
+
+function republishQuestion(question) {
+  // 设置加载状态，防止重复点击
+  question.loading = true;
+
+  axios
+    .put(`http://127.0.0.1:8000/api/questions/question/detail/${question.id}/`, { status: 'pending' })
+    .then(() => {
+      ElMessage.success('重新发布成功，待审核');
+      // 更新问题状态为 'open'
+      question.status = 'pending';
+    })
+    .catch(err => {
+      console.error('重新发布失败:', err);
+      ElMessage.error('重新发布失败，请稍后重试');
+    })
+    .finally(() => {
+      // 恢复按钮状态
+      question.loading = false;
+    });
+}
+
+//删除问题
+function deleteQuestion(question) {
+  // 设置加载状态，防止重复点击
+  question.loading = true;
+
+  // 发送 DELETE 请求
+  axios
+    .delete(`http://127.0.0.1:8000/api/questions/question/detail/${question.id}/`)
+    .then(() => {
+      ElMessage.success('问题已成功删除');
+
+      // 从列表中移除已删除的问题
+      questions.value = questions.value.filter(q => q.id !== question.id);
+    })
+    .catch(err => {
+      console.error('删除问题失败:', err);
+      ElMessage.error('删除问题失败，请稍后重试');
+    })
+    .finally(() => {
+      // 恢复按钮状态
+      question.loading = false;
+    });
 }
 </script>
 
