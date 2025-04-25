@@ -174,12 +174,12 @@ const totalPages = ref(0); // 总页数
 const pageSize = ref(12); // 每页记录数
 
 // 加载课程数据
-const loadCourses = async (page = 1) => {
+const loadCourses = async (page = 1, keyword = '') => {
   try {
     loading.value = true;
     currentPage.value = page;
     const response = await axios.get("http://127.0.0.1:8000/api/courses/list/", {
-      params: { page },
+      params: { page, search: keyword }, // 添加 search 参数
     });
 
     courses.value = response.data.courses;

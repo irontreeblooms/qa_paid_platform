@@ -27,6 +27,8 @@ urlpatterns = [
     path('list/', courses.views.CourseView.as_view()),
     path('purchase/', courses.views.purchase, name='course_purchase'),  # 购买课程
     path('detail/<int:course_id>/', courses.views.CourseDetail),
+    path('revoke/', courses.views.revoke_course),
+    path('republish/', courses.views.republish_course),
 ]
 
 # 允许访问媒体文件

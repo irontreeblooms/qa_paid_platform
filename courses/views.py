@@ -46,7 +46,6 @@ class CourseView(View):
 
     def post(self, request):
         """上传课程"""
-        
         title = request.POST.get('title')
         description = request.POST.get('description')
         price = request.POST.get('price', 0.00)
@@ -119,5 +118,56 @@ def CourseDetail(request,course_id):
     course = Course.objects.filter(id = course_id)
     data = CourseSerializer(course, many=True).data
     print(data)
-    print("sha")
     return JsonResponse(data, safe=False)
+
+
+@csrf_exempt
+def revoke_course(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            course_id = data.get('course_id')
+            course = Course.objects.get(id=course_id)
+
+            course.status = 'closed'
+            course.save()
+
+            return JsonResponse({'success': True, 'message': '课程已撤销发布'})
+        except Course.DoesNotExist:
+            return JsonResponse({'success': False, 'message': '课程不存在'}, status=404)
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': str(e)}, status=500)
+    return JsonResponse({'success': False, 'message': '仅支持 POST 请求'}, status=405)
+
+
+@csrf_exempt
+def republish_course(request):
+    """重新发布课程"""
+    if request.method == 'POST':
+        try:
+            # 解析请求体
+            data = json.loads(request.body)
+            course_id = data.get('course', {}).get('id')  # 从请求中获取课程 ID
+
+            # 检查课程 ID 是否存在
+            if not course_id:
+                return JsonResponse({'success': False, 'message': '课程 ID 缺失'}, status=400)
+
+            # 获取课程对象
+            try:
+                course = Course.objects.get(id=course_id)
+            except Course.DoesNotExist:
+                return JsonResponse({'success': False, 'message': '课程不存在'}, status=404)
+
+            # 更新课程状态
+            course.status = 'pending'  # 假设重新发布后状态为 `pending`
+            course.save()
+
+            return JsonResponse({'success': True, 'message': '课程已成功重新发布'})
+
+        except json.JSONDecodeError:
+            return JsonResponse({'success': False, 'message': '请求数据无效'}, status=400)
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': str(e)}, status=500)
+
+    return JsonResponse({'success': False, 'message': '仅支持 POST 请求'}, status=405)

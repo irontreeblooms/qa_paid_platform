@@ -54,6 +54,27 @@
             <el-empty v-if="questions.length === 0" description="暂无发布问题" />
           </div>
         </el-tab-pane>
+
+
+        <!-- 我发布的课程 -->
+        <el-tab-pane label="我发布的课程" name="publishedcourses">
+          <div class="grid-container">
+            <el-card
+              v-for="course in courses"
+              :key="course.id"
+              class="course-card"
+            >
+              <img :src="'http://127.0.0.1:8000' + course.cover" alt="封面" class="course-cover" />
+              <h3 class="course-title">{{ course.title }}</h3>
+              <p class="course-price">价格：￥{{ course.price }}</p>
+              <p class="course-status">状态：{{ course.status }}</p>
+              <el-button type="primary" @click="openCourseDialog(course)">查看详情</el-button>
+              <el-button v-if="course.status != 'closed'" type="danger" @click="revokeCourse(course)">撤销发布</el-button>
+              <el-button v-if="course.status === 'closed'" type="primary" @click="republishCourse(course)">重新发布</el-button>
+            </el-card>
+            <el-empty v-if="courses.length === 0" description="暂无购买课程" />
+          </div>
+        </el-tab-pane>
       </el-tabs>
     </div>
 
@@ -62,6 +83,7 @@
       <template #default>
         <p>描述：{{ courseDetail.description }}</p>
         <p>价格：￥{{ courseDetail.price }}</p>
+        <p>状态：{{ courseDetail.status }}</p>
         <video
           v-if="courseDetail.video"
           :src="'http://127.0.0.1:8000' + courseDetail.video"
@@ -96,13 +118,10 @@ import axios from 'axios'
 import {ElMessage} from "element-plus";
 
 const activeTab = ref('courses')
-
 const courses = ref([])
 const questions = ref([])
-
 const courseDialogVisible = ref(false)
 const questionDialogVisible = ref(false)
-
 const courseDetail = ref({})
 const questionDetail = ref({})
 
@@ -129,7 +148,7 @@ function revokeQuestion(question) {
   // 设置加载状态，防止重复点击
   question.loading = true;
 
-  // 发送请求，将状态更新为 'closed' 或 'revoked'
+  // 发送请求，将状态更新为 'closed'
   axios
     .put(`http://127.0.0.1:8000/api/questions/question/detail/${question.id}/`, { status: 'closed' })
     .then(() => {
@@ -191,6 +210,49 @@ function deleteQuestion(question) {
       question.loading = false;
     });
 }
+
+//撤销课程发布
+const revokeCourse = async (course) => {
+  try {
+    // 调用后端接口撤销课程发布
+    const response = await axios.post(`http://127.0.0.1:8000/api/courses/revoke/`, {
+      course_id: course.id,
+    });
+
+    if (response.data.success) {
+      ElMessage.success('课程已成功撤销发布');
+      // 可选：在页面上更新课程状态
+      course.status = 'closed'; // 假设撤销后状态变为 'pending'
+    } else {
+      ElMessage.error('撤销失败，请稍后重试');
+    }
+  } catch (error) {
+    console.error('撤销课程发布失败:', error);
+    ElMessage.error('撤销失败，请稍后重试');
+  }
+};
+
+// 重新发布课程的函数
+const republishCourse = async (course) => {
+  try {
+    console.log(course)
+    // 调用后端接口重新发布课程
+    const response = await axios.post('http://127.0.0.1:8000/api/courses/republish/', {
+      course: course,
+    });
+
+    if (response.data.success) {
+      ElMessage.success('课程已成功重新发布');
+      // 可选：在页面上更新课程状态
+      course.status = 'pending';
+    } else {
+      ElMessage.error(response.data.message || '重新发布失败');
+    }
+  } catch (error) {
+    console.error('重新发布课程失败:', error);
+    ElMessage.error('重新发布失败，请稍后重试');
+  }
+};
 </script>
 
 <style scoped>

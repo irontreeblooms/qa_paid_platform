@@ -2,9 +2,9 @@
   <div class="course-detail-container">
     <!-- 顶部返回按钮 & 课程标题 -->
     <div class="course-header">
-      <el-button @click="goBack" text class="back-button" size="small">
-        <el-icon><ArrowLeft /></el-icon> 返回
-      </el-button>
+      <el-button @click="goBack" text class="back-button">
+          <el-icon><ArrowLeft /></el-icon> 返回
+        </el-button>
     </div>
 
     <div v-if="loading" class="loading">
@@ -99,21 +99,17 @@ const goBack = () => {
 .course-header {
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
-  justify-content: flex-start; /* 左对齐 */
+  justify-content: space-between;
+  margin-bottom: 2rem;
 }
 
+/* 返回按钮 */
 .back-button {
   display: flex;
-  align-items: center;
+  justify-content: flex-start;  /* 水平靠左 */
+  align-items: center;          /* 垂直居中 */
   color: #409eff;
   font-weight: 500;
-}
-
-/* 调整返回按钮大小 */
-.back-button.small {
-  font-size: 14px;
-  padding: 5px 10px;
 }
 
 .back-button:hover {

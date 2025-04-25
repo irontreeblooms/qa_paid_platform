@@ -131,6 +131,7 @@ def purchased_courses(request):
         "title": c.course.title,
         "description": c.course.description,
         "price": str(c.course.price),
+        "status": c.course.status,
         "video": c.course.video.url if c.course.video else None,
         "cover": c.course.cover.url if c.course.cover else None,
     } for c in purchases]
@@ -153,7 +154,6 @@ def my_questions(request):
             'status': q.status,
             'user_id': user.id,
             'created_at': q.created_at.strftime('%Y-%m-%d %H:%M'),
-            # 添加更多字段视需要而定
         }
         for q in questions
     ]

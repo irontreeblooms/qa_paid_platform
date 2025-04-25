@@ -7,7 +7,9 @@ class Course(models.Model):
     STATUS_CHOICES = [
         ('pending', '待审核'),
         ('approved', '已通过'),
-        ('rejected', '已拒绝')
+        ('rejected', '已拒绝'),
+        ('open', '开放'),
+        ('closed', '关闭')
     ]
 
     title = models.CharField(max_length=255, verbose_name="课程标题")
