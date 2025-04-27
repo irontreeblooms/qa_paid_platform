@@ -4,26 +4,26 @@
     <table class="table">
       <thead>
         <tr>
-          <th>ID</th>
-          <th>标题</th>
-          <th>描述</th>
-          <th>价格</th>
-          <th>状态</th>
-          <th>操作</th>
+          <th style="width: 20px;text-align: center;">ID</th>
+          <th style="width: 50px;text-align: center;">标题</th>
+          <th style="width: 300px;text-align: center;">描述</th>
+          <th style="width: 30px;text-align: center;">价格</th>
+          <th style="width: 30px;text-align: center;">状态</th>
+          <th style="width: 50px;text-align: center;">操作</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="course in courses" :key="course.id">
-          <td>
+          <td style="text-align: center;">
             <span class="link-like" @click="openCourseDetail(course.id)">
               {{ course.id }}
             </span>
           </td>
-          <td>{{ course.title }}</td>
-          <td>{{ course.description }}</td>
-          <td>{{ course.price }}</td>
-          <td>{{ course.status }}</td>
-          <td>
+          <td style="text-align: center;">{{ course.title }}</td>
+          <td style="text-align: center;">{{ course.description }}</td>
+          <td style="text-align: center;">{{ course.price }}</td>
+          <td style="text-align: center;">{{ course.status }}</td>
+          <td style="text-align: center;">
             <button @click="approveCourse(course.id)" class="btn btn-success">通过</button>
             <button @click="rejectCourse(course.id)" class="btn btn-danger">拒绝</button>
           </td>

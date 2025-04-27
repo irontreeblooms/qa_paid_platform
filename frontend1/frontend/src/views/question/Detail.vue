@@ -19,11 +19,7 @@
           <span>用户: {{ answer.user.username }}</span>
           <span>时间: {{ formatDate(answer.created_at) }}</span>
         </div>
-        <p v-if="answer.is_paid === 0">{{ answer.content }}</p>
-        <p v-else>
-          <span>部分内容已隐藏，购买后查看完整内容。</span>
-          <el-button @click="handlePurchase(answer.id)" type="primary">购买</el-button>
-        </p>
+        <p >{{ answer.content }}</p>
       </div>
     </div>
 
@@ -91,11 +87,6 @@ const fetchAnswers = async () => {
   }
 }
 
-// 购买按钮处理
-const handlePurchase = (answerId) => {
-  // 此处可以执行购买逻辑，跳转到支付页面等
-  console.log(`购买回答 ${answerId} 的完整内容`)
-}
 
 // 提交回答
 const submitAnswer = async () => {

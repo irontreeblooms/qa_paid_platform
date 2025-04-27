@@ -4,22 +4,22 @@
     <table class="table">
       <thead>
         <tr>
-          <th>ID</th>
-          <th>标题</th>
-          <th>状态</th>
-          <th>操作</th>
+          <th style="width: 10px;text-align: center;">ID</th>
+          <th style="width: 100px;text-align: center;">标题</th>
+          <th style="width: 10px;text-align: center;">状态</th>
+          <th style="width: 20px;text-align: center;">操作</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="question in questions" :key="question.id">
-          <td>
+          <td style="text-align: center;">
             <span class="link-like" @click="openDetail(question.id)">
               {{ question.id }}
             </span>
           </td>
-          <td>{{ question.title }}</td>
-          <td>{{ question.status }}</td>
-          <td>
+          <td style="text-align: center;">{{ question.title }}</td>
+          <td style="text-align: center;">{{ question.status }}</td>
+          <td style="text-align: center;">
             <button @click="approveQuestion(question.id)" class="btn btn-success">通过</button>
             <button @click="rejectQuestion(question.id)" class="btn btn-danger">拒绝</button>
           </td>
