@@ -5,7 +5,7 @@ from .models import User, PurchaseRecord
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'is_admin']
+        fields = ['id', 'username', 'email', 'is_superuser','gender','bio','address','industry','balance','nickname']
 
 class PurchasedCourseSerializer(serializers.ModelSerializer):
     course_title = serializers.CharField(source='course.title', read_only=True)

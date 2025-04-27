@@ -92,14 +92,7 @@
             </h3>
             <p class="question-content">{{ truncateContent(question.content) }}</p>
             <div class="question-meta">
-              <span class="answer-count">
-                <el-icon><ChatDotRound /></el-icon>
-                {{ question.answer_count }} 个回答
-              </span>
-              <span class="view-count">
-                <el-icon><View /></el-icon>
-                {{ question.view_count }} 次浏览
-              </span>
+
               <time class="create-time">{{ formatTime(question.created_at) }}</time>
             </div>
           </article>

@@ -126,6 +126,7 @@ def purchased_courses(request):
     user = request.user
     purchases = PurchaseRecord.objects.filter(user=user).select_related('course')
 
+
     data = [{
         "id": c.course.id,
         "title": c.course.title,

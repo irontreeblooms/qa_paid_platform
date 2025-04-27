@@ -2,9 +2,10 @@
   <div class="course-detail-container">
     <!-- 顶部返回按钮 & 课程标题 -->
     <div class="course-header">
-      <el-button @click="goBack" text class="back-button">
-          <el-icon><ArrowLeft /></el-icon> 返回
-        </el-button>
+      <el-button @click="goBack" text class="back-button" >
+        <el-icon><ArrowLeft /></el-icon> 返回
+      </el-button>
+      <h1 class="page-title">课程详情</h1>
     </div>
 
     <div v-if="loading" class="loading">
@@ -13,13 +14,14 @@
 
     <div v-else-if="course" class="course-detail">
       <img :src="'http://127.0.0.1:8000' + course.cover" alt="课程封面" class="course-cover" />
-      <h2 class="course-title">{{ course.title }}</h2>
-      <p class="course-description">{{ course.description }}</p>
-      <p class="course-price">价格：{{ course.price }} 元</p>
-      <el-button type="primary" @click="handlePurchase">购买课程</el-button>
+      <h2 class="course-title">视频标题：{{ course.title }}</h2>
+      <p class="course-description">描述：{{ course.description }}</p>
+      <p class="course-price">价格：<span>{{ course.price }}</span> 元</p>
+      <hr class="divider" />
+      <el-button type="primary" @click="handlePurchase" class="purchase-button">购买课程</el-button>
     </div>
 
-    <el-empty v-else description="课程信息未加载" />
+    <el-empty v-else description="课程信息未加载" class="empty-state" />
   </div>
 </template>
 
@@ -66,14 +68,13 @@ const handlePurchase = () => {
   axios.post('http://127.0.0.1:8000/api/courses/purchase/', { course_id: course.value.id })
   .then(response => {
     if (response.data.success) {
-      // 购买成功的处理逻辑
-      console.log('购买成功');
+      ElMessage.success('购买成功');
     } else {
-      // 购买失败的处理逻辑
-      console.log('购买失败');
+      ElMessage.error('购买失败');
     }
   })
   .catch(error => {
+    ElMessage.error('购买请求出错');
     console.error('购买请求出错:', error);
   });
 };
@@ -87,27 +88,32 @@ const goBack = () => {
 <style scoped>
 /* 课程详情容器样式 */
 .course-detail-container {
-  max-width: 800px;
+  max-width: 900px;
   margin: 40px auto;
   padding: 24px;
   background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* 顶部返回按钮样式 */
 .course-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 2rem;
+  justify-content: center; /* 让标题居中 */
+  margin-bottom: 24px;
 }
 
-/* 返回按钮 */
+.page-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  margin: 0;
+}
+
 .back-button {
-  display: flex;
-  justify-content: flex-start;  /* 水平靠左 */
-  align-items: center;          /* 垂直居中 */
+  position: absolute;
+  left: 350px;
   color: #409eff;
   font-weight: 500;
 }
@@ -116,22 +122,35 @@ const goBack = () => {
   color: #337ecc;
 }
 
+/* 加载中提示样式 */
+.loading {
+  font-size: 18px;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+}
+
 /* 课程封面、标题、描述等样式 */
 .course-cover {
   width: 100%;
-  height: 300px;
+  height: 400px;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 12px;
+  margin-bottom: 20px;
 }
 
 .course-title {
-  font-size: 24px;
+  font-size: 28px;
   font-weight: bold;
+  color: #222;
   margin: 16px 0;
 }
 
 .course-description {
   font-size: 16px;
+  line-height: 1.6;
   color: #555;
   margin: 12px 0;
 }
@@ -140,25 +159,68 @@ const goBack = () => {
   font-size: 20px;
   font-weight: bold;
   color: #ff4d4f;
-  margin: 12px 0;
 }
 
-/* 购买按钮样式 */
-.el-button {
-  margin-top: 20px;
+.course-price span {
+  font-size: 24px;
+  color: #f56c6c;
+}
+
+/* 分隔线样式 */
+.divider {
+  margin: 24px 0;
+  border: none;
+  border-top: 1px solid #ddd;
+}
+
+/* 按钮样式 */
+.purchase-button {
   width: 100%;
+  height: 48px;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: #409eff;
+  border-color: #409eff;
+  color: #fff;
+  border-radius: 8px;
 }
 
-/* 加载中提示样式 */
-.loading {
-  font-size: 18px;
-  color: #666;
-  display: flex;
-  align-items: center;
+.purchase-button:hover {
+  background-color: #66b1ff;
+  border-color: #66b1ff;
 }
 
-.el-empty {
-  text-align: center;
+.purchase-button:active {
+  background-color: #3a8ee6;
+  border-color: #3a8ee6;
+}
+
+/* 空状态样式 */
+.empty-state {
   margin-top: 40px;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .course-detail-container {
+    padding: 16px;
+    margin: 20px auto;
+  }
+
+  .course-cover {
+    height: 250px;
+  }
+
+  .course-title {
+    font-size: 22px;
+  }
+
+  .course-price {
+    font-size: 18px;
+  }
+
+  .purchase-button {
+    font-size: 14px;
+  }
 }
 </style>

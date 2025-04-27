@@ -6,13 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="57fedd76-88f0-4418-8057-1b958ec108d3" name="Changes" comment="Changes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/courses/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/courses/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/courses/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/courses/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/courses/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/courses/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend1/frontend/src/views/course/course.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend1/frontend/src/views/course/course.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend1/frontend/src/views/Home.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend1/frontend/src/views/Home.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend1/frontend/src/views/admin/UserManage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend1/frontend/src/views/admin/UserManage.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend1/frontend/src/views/course/coursedetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend1/frontend/src/views/course/coursedetail.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend1/frontend/src/views/user/MyResources.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend1/frontend/src/views/user/MyResources.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/questions/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/questions/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/users/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/users/serializers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/users/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -27,8 +24,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="JavaScript File" />
-        <option value="Python Script" />
         <option value="Vue Single File Component" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -76,6 +73,28 @@
     </key>
   </component>
   <component name="RunManager" selected="npm.serve">
+    <configuration name="1" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="djangoProject2" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/courses" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/courses/1.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="tests" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="djangoProject2" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -136,9 +155,11 @@
       <item itemvalue="Django 服务器.djangoProject2" />
       <item itemvalue="npm.serve" />
       <item itemvalue="Python.tests" />
+      <item itemvalue="Python.1" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.1" />
         <item itemvalue="Python.tests" />
       </list>
     </recent_temporary>
@@ -211,7 +232,9 @@
       <workItem from="1745393337675" duration="5454000" />
       <workItem from="1745459932081" duration="2188000" />
       <workItem from="1745476657609" duration="8343000" />
-      <workItem from="1745565225347" duration="1239000" />
+      <workItem from="1745565225347" duration="2740000" />
+      <workItem from="1745636233034" duration="148000" />
+      <workItem from="1745721564873" duration="2339000" />
     </task>
     <task id="LOCAL-00001" summary="Changes">
       <created>1745130728368</created>
@@ -290,7 +313,14 @@
       <option name="project" value="LOCAL" />
       <updated>1745476724558</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Changes">
+      <created>1745568948674</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1745568948674</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -312,6 +342,7 @@
     <option name="LAST_COMMIT_MESSAGE" value="Changes" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/djangoProject2$1.coverage" NAME="1 覆盖结果" MODIFIED="1745636297384" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/courses" />
     <SUITE FILE_PATH="coverage/djangoProject2$tests.coverage" NAME="tests 覆盖结果" MODIFIED="1743061459251" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/users" />
   </component>
 </project>
