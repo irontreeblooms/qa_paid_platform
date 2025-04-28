@@ -75,6 +75,27 @@
             <el-empty v-if="courses.length === 0" description="暂无购买课程" />
           </div>
         </el-tab-pane>
+
+        <!-- 我的回答 -->
+        <el-tab-pane label="我的回答" name="myanswers">
+          <div class="question-list">
+            <el-card
+              v-for="question in myanswers_questions"
+              :key="question.id"
+              class="question-card"
+            >
+              <div class="flex items-center justify-between">
+                <div>
+                  <h3 class="question-title">{{ question.title }}</h3>
+                  <p class="question-content">悬赏：{{ question.reward }} ｜ 状态：{{ question.status }}</p>
+                </div>
+                <el-button type="primary" @click="openQuestionDialog(question)">查看详情</el-button>
+                <el-button type="primary" :loading="question.loading" @click="republishQuestion(question)">回答申述</el-button>
+              </div>
+            </el-card>
+            <el-empty v-if="questions.length === 0" description="暂无发布问题" />
+          </div>
+        </el-tab-pane>
       </el-tabs>
     </div>
 
@@ -104,6 +125,17 @@
         <p>悬赏：{{ questionDetail.reward }}</p>
         <p>状态：{{ questionDetail.status }}</p>
         <p>创建时间：{{ questionDetail.created_at }}</p>
+        <hr />
+        <h4>回答列表：</h4>
+        <div v-if="answers.length > 0">
+          <div v-for="answer in answers" :key="answer.id">
+            <p>回答内容：{{ answer.content }}</p>
+            <p>回答者：{{ answer.user }}</p>
+            <p>创建时间：{{ answer.created_at }}</p>
+            <hr />
+          </div>
+        </div>
+        <p v-else>暂无回答。</p>
       </template>
       <template #footer>
         <el-button @click="questionDialogVisible = false">返回</el-button>
@@ -124,6 +156,8 @@ const courseDialogVisible = ref(false)
 const questionDialogVisible = ref(false)
 const courseDetail = ref({})
 const questionDetail = ref({})
+const answers = ref({})
+const myanswers_questions = ref({})
 
 onMounted(() => {
   axios.get('http://127.0.0.1:8000/api/users/user/my-courses/').then(res => {
@@ -131,6 +165,9 @@ onMounted(() => {
   })
   axios.get('http://127.0.0.1:8000/api/users/user/my-questions/').then(res => {
     questions.value = res.data.my_questions
+  })
+  axios.get('http://127.0.0.1:8000/api/users/myanswers/').then(res => {
+    myanswers_questions.value = res.data.myanswers_questions
   })
 })
 
@@ -142,6 +179,15 @@ function openCourseDialog(course) {
 function openQuestionDialog(question) {
   questionDetail.value = question
   questionDialogVisible.value = true
+    // 请求获取指定问题的回答
+  axios.get(`http://127.0.0.1:8000/api/questions/question/answer/${question.id}/`)
+    .then(res => {
+      // 将返回的回答数据赋值给 answers
+      answers.value = res.data;
+    })
+    .catch(err => {
+      console.error("获取回答失败：", err);
+    });
 }
 
 function revokeQuestion(question) {
@@ -253,6 +299,8 @@ const republishCourse = async (course) => {
     ElMessage.error('重新发布失败，请稍后重试');
   }
 };
+
+
 </script>
 
 <style scoped>

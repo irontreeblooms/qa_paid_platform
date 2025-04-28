@@ -6,12 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="57fedd76-88f0-4418-8057-1b958ec108d3" name="Changes" comment="Changes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend1/frontend/src/views/admin/AnswerAudit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend1/frontend/src/views/admin/AnswerAudit.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend1/frontend/src/views/admin/CourseAudit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend1/frontend/src/views/admin/CourseAudit.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend1/frontend/src/views/admin/QuestionAudit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend1/frontend/src/views/admin/QuestionAudit.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend1/frontend/src/views/admin/UserManage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend1/frontend/src/views/admin/UserManage.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend1/frontend/src/views/question/Create.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend1/frontend/src/views/course/coursedetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend1/frontend/src/views/course/coursedetail.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend1/frontend/src/views/question/Detail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend1/frontend/src/views/question/Detail.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend1/frontend/src/views/user/MyResources.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend1/frontend/src/views/user/MyResources.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/users/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/users/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/users/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,7 +72,7 @@
       <recent name="C:\Users\SY2\PycharmProjects\djangoProject2\frontend\frontend\src\pages" />
     </key>
   </component>
-  <component name="RunManager" selected="npm.serve">
+  <component name="RunManager" selected="Django 服务器.djangoProject2">
     <configuration name="1" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="djangoProject2" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -235,7 +234,8 @@
       <workItem from="1745476657609" duration="8343000" />
       <workItem from="1745565225347" duration="2740000" />
       <workItem from="1745636233034" duration="148000" />
-      <workItem from="1745721564873" duration="7340000" />
+      <workItem from="1745721564873" duration="8854000" />
+      <workItem from="1745807399874" duration="7453000" />
     </task>
     <task id="LOCAL-00001" summary="Changes">
       <created>1745130728368</created>
@@ -328,7 +328,14 @@
       <option name="project" value="LOCAL" />
       <updated>1745731182840</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Changes">
+      <created>1745748847521</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1745748847521</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

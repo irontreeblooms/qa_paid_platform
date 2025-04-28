@@ -2,9 +2,7 @@
   <div class="course-detail-container">
     <!-- 顶部返回按钮 & 课程标题 -->
     <div class="course-header">
-      <el-button @click="goBack" text class="back-button" >
-        <el-icon><ArrowLeft /></el-icon> 返回
-      </el-button>
+      <el-button type="primary" plain @click="$router.push('/home')" class="back-button">返回首页</el-button>
       <h1 class="page-title">课程详情</h1>
     </div>
 
@@ -112,16 +110,22 @@ const goBack = () => {
 }
 
 .back-button {
-  position: absolute;
-  left: 350px;
+  display: flex;
+  position: absolute; /* 设置为绝对定位 */
+  top: 66px; /* 距离顶部 16px */
+  left: 320px; /* 距离左侧 16px */
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  border: none;
+  background: none;
   color: #409eff;
   font-weight: 500;
+  font-size: 18px; /* 加大字体 */
 }
 
 .back-button:hover {
-  color: #337ecc;
+  color: #337ecc; /* 悬停时更改文字颜色 */
 }
-
 /* 加载中提示样式 */
 .loading {
   font-size: 18px;

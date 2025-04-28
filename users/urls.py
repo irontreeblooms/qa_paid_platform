@@ -23,7 +23,6 @@ urlpatterns = [
     #用户信息
     path('user/detail/', views.user_detail),
     path('user/edit/', views.edit_user_info),
-    path('user/logintest/', views.JwtTest),
     path('user/login/', views.user_login, name='user_login'),
     path('admin/login/', views.Admin_login, name='admin_login'),
     path('user/logout/', views.logout, name='user_logout'),
@@ -31,4 +30,5 @@ urlpatterns = [
     path('user/my-questions/', views.my_questions, name='my_questions'),
     path('send-code/', views.SendCodeView.as_view()),
     path('register/', views.RegisterView.as_view()),
+    path('myanswers/', views.my_answers),
 ]

@@ -3,7 +3,7 @@ from django.contrib.sessions.models import Session
 from django.utils.decorators import method_decorator
 from django.views import View
 import jwt
-from questions.models import Question
+from questions.models import Question, Answer
 from users.models import PurchaseRecord, User
 from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login
@@ -19,7 +19,6 @@ from django.conf import settings
 
 @csrf_exempt
 def user_login(request):
-
     if request.method == "POST":
         data = json.loads(request.body)  # 解析 JSON 数据
         username = data.get("username")
@@ -223,22 +222,27 @@ class RegisterView(View):
         return JsonResponse({"message": "注册成功"})
 
 
+#查看用户的回答
+@login_required
+def my_answers(request):
+    user = request.user
+    answers = Answer.objects.filter(user=user)
+    question_ids = answers.values_list('question', flat=True).distinct()
+    questions = Question.objects.filter(id__in=question_ids)
 
-
-
-
-def JwtTest(request):
-    headers = {
-        'alg': 'HS256',
-        'typ': 'JWT'
-    }  # jwt的头部，包含了类型和算法的指定
-
-    payload = {
-        "id": 123,
-        "username": '小明',
-        'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=12),
-    }  # jwt的负载，都是一些自定义值,其中exp中的内容是我们指定jwt的一个有效时间，有效时间为12个小时
-
-    token = jwt.encode(headers=headers, payload=payload, algorithm='HS256', key='123')  # 对上面内容进行加密，这里的key就是加的盐
-    print(token)
-    return redirect("http://127.0.0.1:8000/api/users/user/detail")
+    # 序列化问题数据
+    question_list = [
+        {
+            'id': q.id,
+            'title': q.title,
+            'content': q.content,
+            'reward': q.reward,
+            'status': q.status,
+            'user_id': user.id,
+            'created_at': q.created_at.strftime('%Y-%m-%d %H:%M'),
+        }
+        for q in questions
+    ]
+    for i in answers:
+        print(i)
+    return JsonResponse({'myanswers_questions': question_list})

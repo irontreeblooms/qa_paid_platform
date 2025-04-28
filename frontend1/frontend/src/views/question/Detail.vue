@@ -1,5 +1,7 @@
 <template>
+
   <div class="question-detail-container">
+    <el-button type="primary" plain @click="$router.push('/home')" class="back-button">返回首页</el-button>
     <!-- 问题详情 -->
     <div v-if="question">
       <h1>{{ question.title }}</h1>
@@ -52,6 +54,7 @@ const question = ref(null)
 const answers = ref([])
 const showAnswerForm = ref(false)  // 控制显示/隐藏输入框
 const newAnswerContent = ref('')  // 新回答内容
+
 
 // 格式化时间
 const formatDate = (timestamp) => {
@@ -184,11 +187,6 @@ h2 {
   margin: 0;
 }
 
-.el-button {
-  margin-left: auto;
-  display: block;
-  margin-top: 12px;
-}
 
 .answer-form {
   margin-top: 40px;
@@ -231,5 +229,21 @@ div[v-else] {
   padding: 40px 0;
   color: #999;
   font-size: 14px;
+}
+
+.back-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  border: none;
+  background: none;
+  color: #409eff;
+  font-weight: 500;
+  font-size: 16px; /* 加大字体 */
+}
+
+.back-button:hover {
+  color: #337ecc; /* 悬停时更改文字颜色 */
 }
 </style>
