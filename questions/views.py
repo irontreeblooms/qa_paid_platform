@@ -13,6 +13,7 @@ from django.utils.timezone import now
 from django.db.models import F
 from users.models import User
 from payments.models import Transaction
+from django.db.models import Q
 
 @method_decorator(csrf_exempt, name='dispatch')
 class QuestionListView(View):
@@ -104,7 +105,11 @@ class QuestionDetailView(View):
 class AnswerView(View):
     def get(self, request, question_id):
         """获取某个问题下的所有回答"""
-        answers = Answer.objects.filter(question_id=question_id, status='approved').order_by('-created_at')
+        answers = Answer.objects.filter(
+            question_id=question_id
+        ).exclude(
+            Q(status='pending') | Q(status='rejected')
+        ).order_by('-created_at')
         data = AnswerSerializer(answers, many=True).data
         return JsonResponse(data, safe=False)
 
@@ -146,3 +151,60 @@ class AnswerView(View):
         # 返回错误信息
         return JsonResponse(serializer.errors, status=400)
 
+
+@csrf_exempt
+def accept_answer(request):
+    if request.method == 'POST':
+        try:
+            body = json.loads(request.body)
+            answer_id = body.get('answer_id')
+            if not answer_id:
+                return JsonResponse({'error': 'Answer ID is required'}, status=400)
+
+            # 获取回答对象
+            answer = get_object_or_404(Answer, id=answer_id)
+            # 更新回答状态为 "user_approved"
+            answer.status = 'user_approved'
+            # 将奖励给予问题的回答者
+            question = Question.objects.filter(id=answer.question_id).first()
+            User.objects.filter(id=answer.user_id).update(balance=F('balance') + question.reward)
+
+            # 创建交易记录
+            from payments.models import Transaction
+            Transaction.objects.create(
+                user_id=answer.user_id,
+                transaction_type="answer_income",
+                amount=question.reward,
+                description=f"回答问题（ID: {question.id}）获得奖励",
+                created_at=now()
+            )
+            
+            answer.save()
+
+            return JsonResponse({'message': 'Answer has been accepted'}, status=200)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+
+@csrf_exempt
+def reject_answer(request):
+    if request.method == 'POST':
+        try:
+            body = json.loads(request.body)
+            answer_id = body.get('answer_id')
+            if not answer_id:
+                return JsonResponse({'error': 'Answer ID is required'}, status=400)
+
+            # 获取回答对象
+            answer = get_object_or_404(Answer, id=answer_id)
+            # 更新回答状态为 "rejected"
+            answer.status = 'user_rejected'
+            answer.save()
+
+            return JsonResponse({'message': 'Answer has been rejected'}, status=200)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=405)

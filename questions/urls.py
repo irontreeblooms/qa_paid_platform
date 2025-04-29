@@ -23,5 +23,6 @@ urlpatterns = [
     path('question/list/', views.QuestionListView.as_view()),
     path('question/detail/<int:pk>/', views.QuestionDetailView.as_view()),
     path('question/answer/<int:question_id>/', views.AnswerView.as_view()),
-
+    path('question/accept_answer/', views.accept_answer),
+    path('question/reject_answer/', views.reject_answer),
 ]

@@ -88,21 +88,6 @@ class AuditAnswerView(View):
                 return JsonResponse({'error': '非法状态值'}, status=400)
             answer = get_object_or_404(Answer, id=answer_id)
             answer.status = new_status
-
-            #将奖励给予问题的回答者
-            question = Question.objects.filter(id = answer.question_id).first()
-            User.objects.filter(id=answer.user_id).update(balance=F('balance') + question.reward)
-
-            # 创建交易记录
-            from payments.models import Transaction
-            Transaction.objects.create(
-                user_id=answer.user_id,
-                transaction_type="answer_income",
-                amount=question.reward,
-                description=f"回答问题（ID: {question.id}）获得奖励",
-                created_at=now()
-            )
-
             answer.save()
 
             return JsonResponse({'message': '审核成功', 'status': answer.status}, status=200)

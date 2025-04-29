@@ -42,6 +42,8 @@ class Answer(models.Model):
         ('pending', '待审核'),
         ('approved', '审核通过'),
         ('rejected', '审核未通过'),
+        ('user_approved', '用户接受'),
+        ('user_rejected', '用户拒绝'),
     ]
     question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='answers')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='answers')
@@ -49,7 +51,7 @@ class Answer(models.Model):
     is_paid = models.BooleanField(default=False) # 是否为收费回答
     created_at = models.DateTimeField(auto_now_add=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)  # 回答价格（0表示免费）
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')  # 审核状态（待审核、通过、未通过）
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')  # 审核状态（待审核、通过、未通过）
 
     def __str__(self):
         return f'Answer by {self.user} on {self.question}'

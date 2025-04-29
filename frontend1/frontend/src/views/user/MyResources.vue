@@ -89,7 +89,7 @@
                   <h3 class="question-title">{{ question.title }}</h3>
                   <p class="question-content">悬赏：{{ question.reward }} ｜ 状态：{{ question.status }}</p>
                 </div>
-                <el-button type="primary" @click="openQuestionDialog(question)">查看详情</el-button>
+                <el-button type="primary" @click="openAnswerDialog(question)">查看详情</el-button>
                 <el-button type="primary" :loading="question.loading" @click="republishQuestion(question)">回答申述</el-button>
               </div>
             </el-card>
@@ -131,7 +131,12 @@
           <div v-for="answer in answers" :key="answer.id">
             <p>回答内容：{{ answer.content }}</p>
             <p>回答者：{{ answer.user }}</p>
+            <p>状态：{{ answer.status }}</p>
             <p>创建时间：{{ answer.created_at }}</p>
+            <div class="button-group">
+              <el-button type="success" @click="acceptAnswer(answer)">接受回答</el-button>
+              <el-button type="danger" @click="rejectAnswer(answer)">拒绝回答</el-button>
+            </div>
             <hr />
           </div>
         </div>
@@ -139,6 +144,32 @@
       </template>
       <template #footer>
         <el-button @click="questionDialogVisible = false">返回</el-button>
+      </template>
+    </el-dialog>
+
+    <!-- 回答问题详情弹窗 -->
+    <el-dialog v-model="answerDialogVisible" width="50%" :title="questionDetail.title">
+      <template #default>
+        <p>内容：{{ questionDetail.content }}</p>
+        <p>悬赏：{{ questionDetail.reward }}</p>
+        <p>状态：{{ questionDetail.status }}</p>
+        <p>创建时间：{{ questionDetail.created_at }}</p>
+        <p>如对用户的判决不满意，可点击申述</p>
+        <hr />
+        <h4>回答列表：</h4>
+        <div v-if="answers.length > 0">
+          <div v-for="answer in answers" :key="answer.id">
+            <p>回答内容：{{ answer.content }}</p>
+            <p>回答者：{{ answer.user }}</p>
+            <p>状态：{{ answer.status }}</p>
+            <p>创建时间：{{ answer.created_at }}</p>
+            <hr />
+          </div>
+        </div>
+        <p v-else>暂无回答。</p>
+      </template>
+      <template #footer>
+        <el-button @click="answerDialogVisible = false">返回</el-button>
       </template>
     </el-dialog>
   </div>
@@ -158,6 +189,7 @@ const courseDetail = ref({})
 const questionDetail = ref({})
 const answers = ref({})
 const myanswers_questions = ref({})
+const answerDialogVisible = ref(false)
 
 onMounted(() => {
   axios.get('http://127.0.0.1:8000/api/users/user/my-courses/').then(res => {
@@ -179,6 +211,20 @@ function openCourseDialog(course) {
 function openQuestionDialog(question) {
   questionDetail.value = question
   questionDialogVisible.value = true
+    // 请求获取指定问题的回答
+  axios.get(`http://127.0.0.1:8000/api/questions/question/answer/${question.id}/`)
+    .then(res => {
+      // 将返回的回答数据赋值给 answers
+      answers.value = res.data;
+    })
+    .catch(err => {
+      console.error("获取回答失败：", err);
+    });
+}
+
+function openAnswerDialog(question) {
+  questionDetail.value = question
+  answerDialogVisible.value = true
     // 请求获取指定问题的回答
   axios.get(`http://127.0.0.1:8000/api/questions/question/answer/${question.id}/`)
     .then(res => {
@@ -300,6 +346,37 @@ const republishCourse = async (course) => {
   }
 };
 
+function acceptAnswer(answer) {
+  axios
+    .post(`http://127.0.0.1:8000/api/questions/question/accept_answer/`, {
+      answer_id: answer.id,
+    })
+    .then(() => {
+      ElMessage.success('回答已被接受');
+      // 可选：更新回答状态或界面
+      answer.status = 'accepted';
+    })
+    .catch(err => {
+      console.error('接受回答失败:', err);
+      ElMessage.error('接受回答失败，请稍后重试');
+    });
+}
+
+function rejectAnswer(answer) {
+  axios
+    .post(`http://127.0.0.1:8000/api/questions/question/reject_answer/`, {
+      answer_id: answer.id,
+    })
+    .then(() => {
+      ElMessage.success('回答已被拒绝');
+      // 可选：更新回答状态或界面
+      answer.status = 'rejected';
+    })
+    .catch(err => {
+      console.error('拒绝回答失败:', err);
+      ElMessage.error('拒绝回答失败，请稍后重试');
+    });
+}
 
 </script>
 
