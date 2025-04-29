@@ -19,7 +19,6 @@ from django.conf import settings
 
 @csrf_exempt
 def user_login(request):
-
     if request.method == "POST":
         data = json.loads(request.body)  # 解析 JSON 数据
         username = data.get("username")
@@ -66,6 +65,7 @@ def Admin_login(request):
 @csrf_exempt
 @login_required
 def logout(request):
+
     if request.method == "POST":
         sessionid = request.COOKIES.get('sessionid')  # 获取当前请求的 sessionid
         response = HttpResponse("Logout successful")
@@ -226,24 +226,41 @@ class RegisterView(View):
 #查看用户的回答
 @login_required
 def my_answers(request):
-    user = request.user
-    answers = Answer.objects.filter(user=user)
-    question_ids = answers.values_list('question', flat=True).distinct()
-    questions = Question.objects.filter(id__in=question_ids)
+    try:
+        user = request.user
+        # 获取用户的回答
+        answers = Answer.objects.filter(user=user).select_related('question')
 
-    # 序列化问题数据
-    question_list = [
-        {
-            'id': q.id,
-            'title': q.title,
-            'content': q.content,
-            'reward': q.reward,
-            'status': q.status,
-            'user_id': user.id,
-            'created_at': q.created_at.strftime('%Y-%m-%d %H:%M'),
-        }
-        for q in questions
-    ]
-    for i in answers:
-        print(i)
-    return JsonResponse({'myanswers_questions': question_list})
+        # 获取所有相关问题的ID
+        question_ids = answers.values_list('question', flat=True).distinct()
+        questions = Question.objects.filter(id__in=question_ids)
+
+        # 封装问题和对应的回答
+        question_list = []
+        for question in questions:
+            # 获取该问题的所有回答
+            related_answers = answers.filter(question=question)
+            # 序列化问题及其回答
+            question_list.append({
+                'id': question.id,
+                'title': question.title,
+                'content': question.content,
+                'reward': question.reward,
+                'status': question.status,
+                'user_id': user.id,
+                'created_at': question.created_at.strftime('%Y-%m-%d %H:%M'),
+                'answers': [
+                    {
+                        'id': answer.id,
+                        'content': answer.content,
+                        'status': answer.status,
+                        'user':answer.user.username,
+                        'created_at': answer.created_at.strftime('%Y-%m-%d %H:%M'),
+                    }
+                    for answer in related_answers
+                ],
+            })
+        return JsonResponse({'myanswers_questions': question_list}, safe=False)
+
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)

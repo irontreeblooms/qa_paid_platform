@@ -60,27 +60,21 @@ class Answer(models.Model):
         ordering = ['-created_at']
 
 
-# 3. 评论模型
-class Comment(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
-    answer = models.ForeignKey(Answer, on_delete=models.CASCADE, related_name='comments')
-    content = models.TextField()                 # 评论内容
-    created_at = models.DateTimeField(auto_now_add=True)
+class Appeal(models.Model):
+    STATUS_CHOICES = [
+        ('pending', '待处理'),
+        ('resolved', '已解决'),
+        ('rejected', '已驳回'),
+    ]
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='appeals')  # 申述的用户
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, null=True, blank=True, related_name='appeals')  # 关联的问题
+    answer = models.ForeignKey(Answer, on_delete=models.CASCADE, null=True, blank=True, related_name='appeals')  # 关联的答案
+    reason = models.TextField()  # 申述理由
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')  # 申述状态
+    created_at = models.DateTimeField(auto_now_add=True)  # 创建时间
+    updated_at = models.DateTimeField(auto_now=True)  # 更新时间
 
     def __str__(self):
-        return f'Comment by {self.user} on {self.answer}'
-
-
-# 4. 点赞模型
-class Like(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='likes')
-    answer = models.ForeignKey(Answer, on_delete=models.CASCADE, related_name='likes')
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        unique_together = ('user', 'answer')  # 防止同一用户对同一回答重复点赞
-
-    def __str__(self):
-        return f'{self.user} liked {self.answer}'
-
+        return f"Appeal by {self.user} on Question/Answer: {self.question or self.answer}"
 

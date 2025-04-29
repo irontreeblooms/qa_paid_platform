@@ -90,7 +90,7 @@
                   <p class="question-content">悬赏：{{ question.reward }} ｜ 状态：{{ question.status }}</p>
                 </div>
                 <el-button type="primary" @click="openAnswerDialog(question)">查看详情</el-button>
-                <el-button type="primary" :loading="question.loading" @click="republishQuestion(question)">回答申述</el-button>
+                <el-button type="primary" :loading="question.loading" @click="openAppealDialog(question)">回答申述</el-button>
               </div>
             </el-card>
             <el-empty v-if="questions.length === 0" description="暂无发布问题" />
@@ -152,13 +152,13 @@
       <template #default>
         <p>内容：{{ questionDetail.content }}</p>
         <p>悬赏：{{ questionDetail.reward }}</p>
-        <p>状态：{{ questionDetail.status }}</p>
+        <p>回答状态：{{ questionDetail.answers.status }}</p>
         <p>创建时间：{{ questionDetail.created_at }}</p>
         <p>如对用户的判决不满意，可点击申述</p>
         <hr />
         <h4>回答列表：</h4>
-        <div v-if="answers.length > 0">
-          <div v-for="answer in answers" :key="answer.id">
+        <div v-if="questionDetail.answers.length > 0">
+          <div v-for="answer in questionDetail.answers" :key="answer.id">
             <p>回答内容：{{ answer.content }}</p>
             <p>回答者：{{ answer.user }}</p>
             <p>状态：{{ answer.status }}</p>
@@ -172,6 +172,20 @@
         <el-button @click="answerDialogVisible = false">返回</el-button>
       </template>
     </el-dialog>
+
+
+    <el-dialog v-model="appealDialogVisible" title="问题申述">
+      <textarea
+        v-model="appealReason"
+        class="fixed-textarea"
+        placeholder="请输入申述理由"
+      ></textarea>
+      <template #footer>
+        <el-button @click="appealDialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="submitAppeal">提交</el-button>
+      </template>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -186,10 +200,20 @@ const questions = ref([])
 const courseDialogVisible = ref(false)
 const questionDialogVisible = ref(false)
 const courseDetail = ref({})
-const questionDetail = ref({})
+const questionDetail = ref({
+  title: '',
+  content: '',
+  reward: 0,
+  status: '',
+  created_at: '',
+  answers: [], // 初始化为一个空数组
+});
 const answers = ref({})
 const myanswers_questions = ref({})
 const answerDialogVisible = ref(false)
+const appealDialogVisible = ref(false)
+const appealReason = ref('')
+const currentQuestion = ref(null)
 
 onMounted(() => {
   axios.get('http://127.0.0.1:8000/api/users/user/my-courses/').then(res => {
@@ -202,6 +226,35 @@ onMounted(() => {
     myanswers_questions.value = res.data.myanswers_questions
   })
 })
+
+// 打开申述弹窗
+function openAppealDialog(question) {
+  currentQuestion.value = question
+  appealDialogVisible.value = true
+}
+
+// 提交申述
+function submitAppeal() {
+  if (!appealReason.value.trim()) {
+    ElMessage.error('申述理由不能为空')
+    return
+  }
+
+  axios
+    .post('http://127.0.0.1:8000/api/questions/question/appeal/', {
+      question_id: currentQuestion.value.id,
+      reason: appealReason.value,
+    })
+    .then(() => {
+      ElMessage.success('申述提交成功')
+      appealDialogVisible.value = false
+      appealReason.value = ''
+    })
+    .catch((err) => {
+      console.error('申述提交失败:', err)
+      ElMessage.error('申述提交失败，请稍后重试')
+    })
+}
 
 function openCourseDialog(course) {
   courseDetail.value = course
@@ -225,15 +278,7 @@ function openQuestionDialog(question) {
 function openAnswerDialog(question) {
   questionDetail.value = question
   answerDialogVisible.value = true
-    // 请求获取指定问题的回答
-  axios.get(`http://127.0.0.1:8000/api/questions/question/answer/${question.id}/`)
-    .then(res => {
-      // 将返回的回答数据赋值给 answers
-      answers.value = res.data;
-    })
-    .catch(err => {
-      console.error("获取回答失败：", err);
-    });
+
 }
 
 function revokeQuestion(question) {
@@ -347,6 +392,10 @@ const republishCourse = async (course) => {
 };
 
 function acceptAnswer(answer) {
+  if (answer.status === 'user_approved') {
+    ElMessage.warning('回答已接受，请勿继续操作')
+    return
+  }
   axios
     .post(`http://127.0.0.1:8000/api/questions/question/accept_answer/`, {
       answer_id: answer.id,
@@ -354,7 +403,7 @@ function acceptAnswer(answer) {
     .then(() => {
       ElMessage.success('回答已被接受');
       // 可选：更新回答状态或界面
-      answer.status = 'accepted';
+      answer.status = 'user_approved';
     })
     .catch(err => {
       console.error('接受回答失败:', err);
@@ -363,6 +412,10 @@ function acceptAnswer(answer) {
 }
 
 function rejectAnswer(answer) {
+  if (answer.status === 'user_rejected') {
+    ElMessage.warning('回答已拒绝，请勿继续操作')
+    return
+  }
   axios
     .post(`http://127.0.0.1:8000/api/questions/question/reject_answer/`, {
       answer_id: answer.id,
@@ -370,7 +423,7 @@ function rejectAnswer(answer) {
     .then(() => {
       ElMessage.success('回答已被拒绝');
       // 可选：更新回答状态或界面
-      answer.status = 'rejected';
+      answer.status = 'user_rejected';
     })
     .catch(err => {
       console.error('拒绝回答失败:', err);
@@ -516,4 +569,19 @@ function rejectAnswer(answer) {
   object-fit: contain;
 }
 
+.fixed-textarea {
+  width: 100%; /* 占满弹窗宽度 */
+  height: 200px; /* 固定高度 */
+  resize: none; /* 禁止用户调整大小 */
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #dcdfe6;
+  border-radius: 4px;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.fixed-textarea:focus {
+  border-color: #409eff; /* 聚焦时改变边框颜色 */
+}
 </style>

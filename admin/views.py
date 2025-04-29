@@ -6,7 +6,7 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import F
 import users.models
-from questions.models import Question,Answer
+from questions.models import Question, Answer, Appeal
 from courses.models import Course
 from users.models import User
 from questions.serializers import QuestionSerializer, AnswerSerializer
@@ -141,3 +141,68 @@ class ManageUserView(View):
         user.is_superuser = data.get('is_superuser', user.is_superuser)
         user.save()
         return JsonResponse({'message': '用户权限更新成功', 'is_superuser': user.is_superuser})
+
+
+
+@csrf_exempt
+def list_appeals(request):
+    if request.method == 'GET':
+        appeals = Appeal.objects.all().order_by('-created_at')
+        appeals_data = [
+            {
+                'id': appeal.id,
+                'user': appeal.user.username,
+                'question': appeal.question.title if appeal.question else None,
+                'answer': appeal.answer.content if appeal.answer else None,
+                'reason': appeal.reason,
+                'status': appeal.status,
+                'created_at': appeal.created_at,
+                'updated_at': appeal.updated_at,
+            }
+            for appeal in appeals
+        ]
+        return JsonResponse({'appeals': appeals_data}, safe=False)
+    else:
+        return JsonResponse({'error': '仅支持 GET 请求'}, status=405)
+
+
+@csrf_exempt
+def update_appeal_status(request, appeal_id):
+    if request.method == 'PUT':
+        try:
+            data = json.loads(request.body)
+            new_status = data.get('status')
+            answer_id = data.get('answer_id')
+
+            if new_status not in dict(Appeal.STATUS_CHOICES):
+                return JsonResponse({'error': '无效的状态值'}, status=400)
+
+            if new_status=='resolved':
+                # 获取回答对象
+                answer = get_object_or_404(Answer, id=answer_id)
+                # 更新回答状态为 "user_approved"
+                answer.status = 'user_approved'
+                # 将奖励给予问题的回答者
+                question = Question.objects.filter(id=answer.question_id).first()
+                User.objects.filter(id=answer.user_id).update(balance=F('balance') + question.reward)
+
+                # 创建交易记录
+                from payments.models import Transaction
+                Transaction.objects.create(
+                    user_id=answer.user_id,
+                    transaction_type="answer_income",
+                    amount=question.reward,
+                    description=f"回答问题（ID: {question.id}）获得奖励",
+                    created_at=now()
+                )
+
+            appeal = get_object_or_404(Appeal, id=appeal_id)
+            appeal.status = new_status
+            appeal.save()
+
+            return JsonResponse({'message': '申述状态已更新', 'status': appeal.status}, status=200)
+
+        except json.JSONDecodeError:
+            return JsonResponse({'error': '请求格式错误'}, status=400)
+    else:
+        return JsonResponse({'error': '仅支持 PUT 请求'}, status=405)

@@ -25,4 +25,5 @@ urlpatterns = [
     path('question/answer/<int:question_id>/', views.AnswerView.as_view()),
     path('question/accept_answer/', views.accept_answer),
     path('question/reject_answer/', views.reject_answer),
+    path('question/appeal/', views.create_appeal, name='create_appeal'),  # 提交申述
 ]

@@ -7,6 +7,7 @@
         <el-menu-item index="answers">审核回答</el-menu-item>
         <el-menu-item index="courses">审核课程</el-menu-item>
         <el-menu-item index="users">管理用户</el-menu-item>
+        <el-menu-item index="appeals">查看申述</el-menu-item>
       </el-menu>
       <!-- 注销按钮 -->
       <el-button type="danger" class="logout-button" @click="logout">退出</el-button>
@@ -26,6 +27,9 @@
       <div v-if="activeTab === 'users'">
         <UserManagement />
       </div>
+      <div v-if="activeTab === 'appeals'"> <!-- 新增申述模块 -->
+        <AppealAudit />
+      </div>
     </el-main>
   </el-container>
 </template>
@@ -35,11 +39,12 @@ import QuestionAudit from "@/views/admin/QuestionAudit.vue";
 import AnswerAudit from "@/views/admin/AnswerAudit.vue";
 import CourseAudit from "@/views/admin/CourseAudit.vue";
 import UserManagement from "@/views/admin/UserManage.vue";
+import AppealAudit from "@/views/admin/AppealAudit.vue";
 import axios from "axios";
 import {ElMessage} from "element-plus";
 
 export default {
-  components: { QuestionAudit, AnswerAudit, CourseAudit, UserManagement },
+  components: { QuestionAudit, AnswerAudit, CourseAudit, UserManagement ,AppealAudit},
   data() {
     return {
       activeTab: "questions",

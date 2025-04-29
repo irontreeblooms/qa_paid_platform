@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 import json
-from .models import Question, Answer
+from .models import Question, Answer, Appeal
 from .serializers import QuestionSerializer, AnswerSerializer
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils import timezone
@@ -178,7 +178,7 @@ def accept_answer(request):
                 description=f"回答问题（ID: {question.id}）获得奖励",
                 created_at=now()
             )
-            
+
             answer.save()
 
             return JsonResponse({'message': 'Answer has been accepted'}, status=200)
@@ -208,3 +208,34 @@ def reject_answer(request):
             return JsonResponse({'error': str(e)}, status=500)
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+
+
+@csrf_exempt
+def create_appeal(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            user = request.user
+            question_id = data.get('question_id')
+            answer_id = data.get('answer_id')
+            reason = data.get('reason')
+
+            if not reason:
+                return JsonResponse({'error': '申述理由不能为空'}, status=400)
+
+            question = get_object_or_404(Question, id=question_id) if question_id else None
+            answer = get_object_or_404(Answer, id=answer_id) if answer_id else None
+
+            appeal = Appeal.objects.create(
+                user=user,
+                question=question,
+                answer=answer,
+                reason=reason
+            )
+            return JsonResponse({'message': '申述已提交', 'appeal_id': appeal.id}, status=201)
+
+        except json.JSONDecodeError:
+            return JsonResponse({'error': '请求格式错误'}, status=400)
+    else:
+        return JsonResponse({'error': '仅支持 POST 请求'}, status=405)
