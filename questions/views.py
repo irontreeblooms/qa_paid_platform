@@ -124,6 +124,10 @@ class AnswerView(View):
         except ObjectDoesNotExist:
             return JsonResponse({"error": "问题不存在"}, status=404)
 
+        answer = Answer.objects.filter(user=request.user, question=question_id)
+        if answer.exists():  # 检查 QuerySet 是否有结果
+            return JsonResponse({"error": "您已回答过该问题"}, status=200)
+
         # 获取当前用户
         user = request.user  # 假设用户已认证
 
@@ -133,10 +137,6 @@ class AnswerView(View):
         data['status'] = 'pending'  # 默认状态为待审核
         data['created_at'] = timezone.now()
 
-        # 如果是收费回答，设置价格
-        if 'is_paid' in data and data['is_paid']:
-            if 'price' not in data or data['price'] <= 0:
-                return JsonResponse({"error": "收费回答必须设置价格"}, status=400)
 
         # 序列化并保存回答
         serializer = AnswerSerializer(data=data)
@@ -163,6 +163,10 @@ def accept_answer(request):
 
             # 获取回答对象
             answer = get_object_or_404(Answer, id=answer_id)
+
+            if answer.status == 'user_rejected':
+                return JsonResponse({'message': 'Answer has been rejected by user'}, status=403)
+
             # 更新回答状态为 "user_approved"
             answer.status = 'user_approved'
             # 将奖励给予问题的回答者
@@ -196,9 +200,11 @@ def reject_answer(request):
             answer_id = body.get('answer_id')
             if not answer_id:
                 return JsonResponse({'error': 'Answer ID is required'}, status=400)
-
             # 获取回答对象
             answer = get_object_or_404(Answer, id=answer_id)
+            if answer.status == 'user_approved':
+                return JsonResponse({'message': 'Answer has been approved by user'}, status=403)
+
             # 更新回答状态为 "rejected"
             answer.status = 'user_rejected'
             answer.save()

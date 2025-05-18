@@ -20,12 +20,16 @@ from django.conf import settings
 @csrf_exempt
 def user_login(request):
     if request.method == "POST":
+
         data = json.loads(request.body)  # 解析 JSON 数据
         username = data.get("username")
         password = data.get("password")
         user = authenticate(username=username, password=password)  # 验证用户
+
+        if user.is_banned:
+            return JsonResponse({"error": "您已被封禁,请联系管理员解封"}, status=403)
+
         if user is not None:
-            print(user.is_superuser)
             login(request, user)  # 登录用户
 
             return JsonResponse({'code': 200, 'info': '登陆成功'})
@@ -264,3 +268,24 @@ def my_answers(request):
 
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
+
+
+def text(request):
+    if request.method == "GET":
+        created = 0
+        skipped = 0
+        for i in range(1, 101):
+            username = f"testuser{i}"
+            password = "123456"
+            if not User.objects.filter(username=username).exists():
+                User.objects.create_user(username=username, password=password)  # 使用 create_user 自动加密密码
+                created += 1
+            else:
+                skipped += 1
+        return JsonResponse({
+            "message": "批量用户创建完成",
+            "created": created,
+            "skipped": skipped
+        }, status=200)
+    else:
+        return JsonResponse({"error": "仅支持 POST 请求"}, status=405)

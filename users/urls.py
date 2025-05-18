@@ -31,4 +31,5 @@ urlpatterns = [
     path('send-code/', views.SendCodeView.as_view()),
     path('register/', views.RegisterView.as_view()),
     path('myanswers/', views.my_answers),
+    path('text/', views.text),
 ]

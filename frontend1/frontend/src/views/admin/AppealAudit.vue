@@ -4,12 +4,12 @@
     <table class="table">
       <thead>
         <tr>
-          <th style="text-align: center;">申述ID</th>
-          <th style="text-align: center;">用户</th>
-          <th style="text-align: center;">目标</th>
-          <th style="text-align: center;">申述理由</th>
-          <th style="text-align: center;">状态</th>
-          <th style="text-align: center;">操作</th>
+          <th style="width: 10px;text-align: center;">申述ID</th>
+          <th style="width: 10px;text-align: center;">用户</th>
+          <th style="width: 200px;text-align: center;">目标</th>
+          <th style="width: 150px;text-align: center;">申述理由</th>
+          <th style="width: 10px;text-align: center;">状态</th>
+          <th style="width: 60px;text-align: center;">操作</th>
         </tr>
       </thead>
       <tbody>

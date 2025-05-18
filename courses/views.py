@@ -104,7 +104,7 @@ def purchase(request):
             description=f"课程《{course.title}》被购买",
         )
 
-        return JsonResponse({"message": "购买成功", "course_id": course.id})
+        return JsonResponse({"message": "购买成功", "course_id": course.id, "success": 'true',})
 
     except Course.DoesNotExist:
         return JsonResponse({"error": "课程不存在"}, status=404)

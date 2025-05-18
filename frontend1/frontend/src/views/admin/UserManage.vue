@@ -15,11 +15,11 @@
     <table class="table">
       <thead>
         <tr>
-          <th style="text-align: center;">ID</th>
-          <th style="text-align: center;">用户名</th>
-          <th style="text-align: center;">邮箱</th>
-          <th style="text-align: center;">管理员权限</th>
-          <th style="text-align: center;">操作</th>
+          <th style="width: 20px;text-align: center;">ID</th>
+          <th style="width: 50px;text-align: center;">用户名</th>
+          <th style="width: 80px;text-align: center;">邮箱</th>
+          <th style="width: 20px;text-align: center;">状态</th>
+          <th style="width: 30px;text-align: center;">操作</th>
         </tr>
       </thead>
       <tbody>
@@ -30,10 +30,10 @@
           </td>
           <td style="text-align: center;">{{ user.username }}</td>
           <td style="text-align: center;">{{ user.email }}</td>
-          <td style="text-align: center;">{{ user.is_superuser ? '是' : '否' }}</td>
+          <td style="text-align: center;">{{ user.is_banned ? '封禁' : '未封禁' }}</td>
           <td style="text-align: center;">
-            <button @click="toggleAdmin(user)" class="btn btn-primary">
-              {{ user.is_superuser ? '取消管理员' : '设为管理员' }}
+            <button @click="toggleBan(user)" class="btn btn-primary">
+              {{ user.is_banned ? '封禁用户' : '解封用户' }}
             </button>
           </td>
         </tr>
@@ -86,17 +86,17 @@ export default {
         console.error('获取用户失败:', error);
       }
     },
-    async toggleAdmin(user) {
+    async toggleBan(user) {
       try {
         await axios.post('http://127.0.0.1:8000/api/admin/users/', {
           user_id: user.id,
-          is_superuser: !user.is_superuser
+          is_banned: !user.is_banned
         });
         this.fetchUsers(); // 重新获取用户列表
       } catch (error) {
-        console.error('更新用户权限失败:', error);
+        console.error('更新用户封禁状态失败:', error);
       }
-    },
+  },
     showDetails(user) {
       this.selectedUser = user; // 设置为当前用户
     },

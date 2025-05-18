@@ -123,24 +123,30 @@ class AuditCourseView(View):
         except json.JSONDecodeError:
             return JsonResponse({'error': '请求格式错误'}, status=400)
 
-
+@method_decorator(csrf_exempt, name='dispatch')
 class ManageUserView(View):
     """管理用户"""
-
     def get(self, request):
         users = User.objects.all()
         data = UserSerializer(users, many=True).data
         return JsonResponse({'users': data})
 
     def post(self, request):
-        """修改用户权限"""
+        """更新用户状态"""
         data = json.loads(request.body)
-        user_id = data.get('user_id')
-        user = get_object_or_404(User, id=user_id)
-        data = json.loads(request.body)
-        user.is_superuser = data.get('is_superuser', user.is_superuser)
-        user.save()
-        return JsonResponse({'message': '用户权限更新成功', 'is_superuser': user.is_superuser})
+
+        try:
+            user = User.objects.get(id=data['user_id'])
+            if 'is_superuser' in data:
+                user.is_superuser = data['is_superuser']
+            if 'is_banned' in data:
+                user.is_banned = data['is_banned']
+            user.save()
+            return JsonResponse({'message': '用户状态更新成功'})
+        except User.DoesNotExist:
+            return JsonResponse({'error': '用户不存在'}, status=404)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
 
 
 
@@ -173,13 +179,14 @@ def update_appeal_status(request, appeal_id):
             data = json.loads(request.body)
             new_status = data.get('status')
             answer_id = data.get('answer_id')
+            appeal = get_object_or_404(Appeal, id=appeal_id)
 
             if new_status not in dict(Appeal.STATUS_CHOICES):
                 return JsonResponse({'error': '无效的状态值'}, status=400)
 
             if new_status=='resolved':
                 # 获取回答对象
-                answer = get_object_or_404(Answer, id=answer_id)
+                answer = get_object_or_404(Answer,user=appeal.user,question = appeal.question)
                 # 更新回答状态为 "user_approved"
                 answer.status = 'user_approved'
                 # 将奖励给予问题的回答者
@@ -196,7 +203,6 @@ def update_appeal_status(request, appeal_id):
                     created_at=now()
                 )
 
-            appeal = get_object_or_404(Appeal, id=appeal_id)
             appeal.status = new_status
             appeal.save()
 

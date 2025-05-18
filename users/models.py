@@ -10,6 +10,7 @@ class User(AbstractUser):
     bio = models.TextField(blank=True, null=True, verbose_name="个人简介")
     address = models.CharField(max_length=32, verbose_name="居住地")
     industry = models.CharField(max_length=16,verbose_name="所在行业")
+    is_banned = models.BooleanField(default=False)
     # 性别选项（数据库存储值，显示名称）
     GENDER_CHOICES = (
         ('M', '男'),      # 存储 'M', 显示 '男'

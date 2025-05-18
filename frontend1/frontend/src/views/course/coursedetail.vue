@@ -72,8 +72,8 @@ const handlePurchase = () => {
     }
   })
   .catch(error => {
-    ElMessage.error('购买请求出错');
-    console.error('购买请求出错:', error);
+    ElMessage.error('购买失败');
+    console.error('购买失败:', error);
   });
 };
 

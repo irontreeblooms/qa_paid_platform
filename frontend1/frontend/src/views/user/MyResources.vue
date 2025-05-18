@@ -148,17 +148,17 @@
     </el-dialog>
 
     <!-- 回答问题详情弹窗 -->
-    <el-dialog v-model="answerDialogVisible" width="50%" :title="questionDetail.title">
+    <el-dialog v-model="answerDialogVisible" width="50%" :title="answeredquestionDetail.title">
       <template #default>
-        <p>内容：{{ questionDetail.content }}</p>
-        <p>悬赏：{{ questionDetail.reward }}</p>
-        <p>回答状态：{{ questionDetail.answers.status }}</p>
-        <p>创建时间：{{ questionDetail.created_at }}</p>
+        <p>内容：{{ answeredquestionDetail.content }}</p>
+        <p>悬赏：{{ answeredquestionDetail.reward }}</p>
+        <p>回答状态：{{ answeredquestionDetail.answers.status }}</p>
+        <p>创建时间：{{ answeredquestionDetail.created_at }}</p>
         <p>如对用户的判决不满意，可点击申述</p>
         <hr />
         <h4>回答列表：</h4>
-        <div v-if="questionDetail.answers.length > 0">
-          <div v-for="answer in questionDetail.answers" :key="answer.id">
+        <div v-if="answeredquestionDetail.answers.length > 0">
+          <div v-for="answer in answeredquestionDetail.answers" :key="answer.id">
             <p>回答内容：{{ answer.content }}</p>
             <p>回答者：{{ answer.user }}</p>
             <p>状态：{{ answer.status }}</p>
@@ -200,7 +200,8 @@ const questions = ref([])
 const courseDialogVisible = ref(false)
 const questionDialogVisible = ref(false)
 const courseDetail = ref({})
-const questionDetail = ref({
+const questionDetail = ref({});
+const answeredquestionDetail = ref({
   title: '',
   content: '',
   reward: 0,
@@ -276,7 +277,7 @@ function openQuestionDialog(question) {
 }
 
 function openAnswerDialog(question) {
-  questionDetail.value = question
+  answeredquestionDetail.value = question
   answerDialogVisible.value = true
 
 }

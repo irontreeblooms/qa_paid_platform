@@ -110,7 +110,7 @@ const submitAnswer = async () => {
     fetchAnswers()  // 重新获取回答列表
   } catch (error) {
     console.error('提交回答失败', error)
-    alert('提交回答失败，请稍后再试')
+    alert('您已回答过该问题')
   }
 }
 
