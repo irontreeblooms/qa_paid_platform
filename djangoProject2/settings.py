@@ -16,25 +16,6 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-CORS_ALLOW_CREDENTIALS = True  # 必须为True
-SESSION_COOKIE_SAMESITE = 'None'  # 开发环境设置为None
-SESSION_COOKIE_SECURE = True      # 即使本地开发也设为True
-CSRF_COOKIE_SAMESITE = 'None'
-CSRF_COOKIE_SECURE = True
-
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:8080',  # 前端地址
-    "http://127.0.0.1:8080",
-]
-
-
-# 允许的 HTTP 方法
-CORS_ALLOW_METHODS = ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
-
-# 允许的请求头
-CORS_ALLOW_HEADERS = [
-    "content-type", "authorization", "x-csrftoken"
-]
 
 
 # Quick-start development settings - unsuitable for production
@@ -45,8 +26,6 @@ SECRET_KEY = 'django-insecure-kx0_wbwacyv3*s^+vz($*r3s&cl*=sdfl*pt9!(wm$l#6%wmqa
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-ALLOWED_HOSTS = []
 
 
 
@@ -194,3 +173,26 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = '2856449558@qq.com'
 EMAIL_HOST_PASSWORD = 'ckfinunmukjsdhba'  # 注意是授权码不是密码
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
+CORS_ALLOW_CREDENTIALS = True  # 必须为True
+SESSION_COOKIE_SAMESITE = 'None'  # 开发环境设置为None
+SESSION_COOKIE_SECURE = True      # 即使本地开发也设为True
+CSRF_COOKIE_SAMESITE = 'None'
+CSRF_COOKIE_SECURE = True
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:8080',  # 前端地址
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:8080',  # Vue 前端地址，必须加 http
+]
+
+# 允许的 HTTP 方法
+CORS_ALLOW_METHODS = ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+
+# 允许的请求头
+CORS_ALLOW_HEADERS = [
+    "content-type", "authorization", "x-csrftoken"
+]

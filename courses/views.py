@@ -45,6 +45,7 @@ class CourseView(View):
         })
 
     def post(self, request):
+
         """上传课程"""
         title = request.POST.get('title')
         description = request.POST.get('description')
@@ -115,6 +116,7 @@ def purchase(request):
 
 @csrf_exempt
 def CourseDetail(request,course_id):
+
     course = Course.objects.filter(id = course_id)
     data = CourseSerializer(course, many=True).data
     print(data)
