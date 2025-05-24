@@ -45,6 +45,14 @@
         </tr>
       </tbody>
     </table>
+
+    <!-- 分页 -->
+<div class="pagination">
+  <button class="btn" @click="changePage(currentPage - 1)" :disabled="currentPage === 1">上一页</button>
+  <span style="margin: 0 10px;">第 {{ currentPage }} 页 / 共 {{ totalPages }} 页</span>
+  <button class="btn" @click="changePage(currentPage + 1)" :disabled="currentPage === totalPages">下一页</button>
+</div>
+
   </div>
 </template>
 
@@ -54,15 +62,26 @@ import axios from 'axios'
 import { ElMessage } from 'element-plus'
 
 const appeals = ref([])
+const currentPage = ref(1)
+const totalPages = ref(1)
 
 // 获取申述数据
-async function fetchAppeals() {
+async function fetchAppeals(page = 1) {
   try {
-    const response = await axios.get('http://127.0.0.1:8000/api/admin/appeals/')
+    const response = await axios.get(`http://127.0.0.1:8000/api/admin/appeals/?page=${page}`)
     appeals.value = response.data.appeals
+    currentPage.value = response.data.current_page
+    totalPages.value = response.data.total_pages
   } catch (error) {
     console.error('获取申述失败:', error)
     ElMessage.error('获取申述失败，请稍后重试')
+  }
+}
+
+// 切换分页
+function changePage(page) {
+  if (page >= 1 && page <= totalPages.value) {
+    fetchAppeals(page)
   }
 }
 
@@ -71,18 +90,19 @@ async function updateStatus(appealId, status) {
   try {
     await axios.put(`http://127.0.0.1:8000/api/admin/appeals/${appealId}/`, { status })
     ElMessage.success('申述状态更新成功')
-    fetchAppeals() // 重新获取申述数据
+    fetchAppeals(currentPage.value) // 保持在当前页刷新
   } catch (error) {
     console.error('更新申述状态失败:', error)
     ElMessage.error('更新申述状态失败，请稍后重试')
   }
 }
 
-// 初始化获取数据
+// 初始化
 onMounted(() => {
   fetchAppeals()
 })
 </script>
+
 
 <style scoped>
 .text-center {
@@ -145,5 +165,27 @@ onMounted(() => {
 
 .btn:hover {
   opacity: 0.8;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+.pagination button {
+  padding: 5px 12px;
+  background-color: #409eff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 </style>

@@ -1,11 +1,7 @@
 from django.http import JsonResponse
-from django.contrib.auth.decorators import login_required, user_passes_test
-from django.utils.decorators import method_decorator
 from django.views import View
 import json
-from django.views.decorators.csrf import csrf_exempt
 from django.db.models import F
-import users.models
 from questions.models import Question, Answer, Appeal
 from courses.models import Course
 from users.models import User
@@ -15,20 +11,28 @@ from courses.serializers import CourseSerializer
 from django.shortcuts import get_object_or_404
 from django.utils.timezone import now
 from payments.models import Transaction
+from django.core.paginator import Paginator, EmptyPage
+from rest_framework.views import APIView
 
 # 管理员权限检查
 def is_admin(user):
     return user.is_authenticated and user.is_admin
 
-@method_decorator(csrf_exempt, name='dispatch')
-class AuditQuestionView(View):
+
+class AuditQuestionView(APIView):
     """审核问题"""
 
     def get(self, request):
-        """获取所有待审核的问题"""
         questions = Question.objects.filter(status='pending')
-        serializer = QuestionSerializer(questions, many=True)
-        return JsonResponse({'questions': serializer.data}, safe=False)
+        paginator = Paginator(questions, 15)  # 每页 10 条
+        page = request.GET.get('page', 1)
+        data = paginator.get_page(page)
+        serializer = QuestionSerializer(data, many=True)
+        return JsonResponse({
+            'questions': serializer.data,
+            'total_pages': paginator.num_pages,
+            'current_page': data.number
+        })
 
     def post(self, request):
         """审核通过或拒绝问题"""
@@ -66,15 +70,34 @@ class AuditQuestionView(View):
         return JsonResponse({'message': '审核成功', 'status': question.status}, status=200)
 
 
-@method_decorator(csrf_exempt, name='dispatch')
-class AuditAnswerView(View):
+
+class AuditAnswerView(APIView):
     """审核回答"""
 
     def get(self, request):
-        """获取所有待审核的回答"""
-        answers = Answer.objects.filter(status='pending')
-        serializer = AnswerSerializer(answers, many=True)
-        return JsonResponse({'answers': serializer.data}, status=200)
+        """分页获取待审核的回答"""
+        page = int(request.GET.get('page', 1))  # 默认第一页
+        page_size = 15  # 每页 10 条数据，可自行修改
+
+        # 查询待审核回答
+        answers = Answer.objects.filter(status='pending').order_by('-created_at')
+
+        # 使用 Django 的分页器
+        paginator = Paginator(answers, page_size)
+
+        try:
+            current_page = paginator.page(page)
+        except EmptyPage:
+            return JsonResponse({'answers': [], 'current_page': page, 'total_pages': paginator.num_pages}, status=200)
+
+        # 序列化当前页的数据
+        serializer = AnswerSerializer(current_page, many=True)
+
+        return JsonResponse({
+            'answers': serializer.data,
+            'current_page': page,
+            'total_pages': paginator.num_pages
+        }, status=200)
 
     def post(self, request):
         """审核回答（通过/拒绝）"""
@@ -95,14 +118,35 @@ class AuditAnswerView(View):
             return JsonResponse({'error': '请求格式错误'}, status=400)
 
 
-@method_decorator(csrf_exempt, name='dispatch')
+
 class AuditCourseView(View):
     """审核课程"""
+
     def get(self, request):
-        """获取所有待审核的课程"""
-        courses = Course.objects.filter(status='pending')
-        serializer = CourseSerializer(courses, many=True)
-        return JsonResponse({'courses': serializer.data}, status=200)
+        """获取所有待审核的课程，支持分页"""
+        page = request.GET.get('page', 1)  # 从请求参数中获取页码，默认第1页
+        page_size = request.GET.get('page_size', 10)  # 每页条数，默认10
+
+        courses = Course.objects.filter(status='pending').order_by('id')  # 按id排序，保证顺序一致
+        paginator = Paginator(courses, page_size)
+
+        try:
+            page_obj = paginator.page(page)
+        except Exception as e:
+            # 页码非法时返回第一页
+            page_obj = paginator.page(1)
+
+        serializer = CourseSerializer(page_obj.object_list, many=True)
+
+        data = {
+            'courses': serializer.data,
+            'current_page': page_obj.number,
+            'total_pages': paginator.num_pages,
+            'total_items': paginator.count,
+            'has_next': page_obj.has_next(),
+            'has_previous': page_obj.has_previous(),
+        }
+        return JsonResponse(data, status=200)
 
     def post(self, request):
         """审核通过或拒绝课程"""
@@ -123,13 +167,31 @@ class AuditCourseView(View):
         except json.JSONDecodeError:
             return JsonResponse({'error': '请求格式错误'}, status=400)
 
-@method_decorator(csrf_exempt, name='dispatch')
+
 class ManageUserView(View):
     """管理用户"""
+
     def get(self, request):
-        users = User.objects.all()
-        data = UserSerializer(users, many=True).data
-        return JsonResponse({'users': data})
+        users = User.objects.all().order_by('id')  # 按id排序
+        page = request.GET.get('page', 1)
+        page_size = request.GET.get('page_size', 10)
+
+        paginator = Paginator(users, page_size)
+        try:
+            page_obj = paginator.page(page)
+        except Exception:
+            page_obj = paginator.page(1)
+
+        data = UserSerializer(page_obj.object_list, many=True).data
+
+        return JsonResponse({
+            'users': data,
+            'current_page': page_obj.number,
+            'total_pages': paginator.num_pages,
+            'total_items': paginator.count,
+            'has_next': page_obj.has_next(),
+            'has_previous': page_obj.has_previous(),
+        })
 
     def post(self, request):
         """更新用户状态"""
@@ -150,10 +212,22 @@ class ManageUserView(View):
 
 
 
-@csrf_exempt
+
 def list_appeals(request):
     if request.method == 'GET':
         appeals = Appeal.objects.all().order_by('-created_at')
+
+        # 获取分页参数，默认第一页，每页10条
+        page = request.GET.get('page', 1)
+        page_size = request.GET.get('page_size', 10)
+
+        paginator = Paginator(appeals, page_size)
+
+        try:
+            page_obj = paginator.page(page)
+        except Exception:
+            page_obj = paginator.page(1)
+
         appeals_data = [
             {
                 'id': appeal.id,
@@ -165,14 +239,22 @@ def list_appeals(request):
                 'created_at': appeal.created_at,
                 'updated_at': appeal.updated_at,
             }
-            for appeal in appeals
+            for appeal in page_obj.object_list
         ]
-        return JsonResponse({'appeals': appeals_data}, safe=False)
+
+        return JsonResponse({
+            'appeals': appeals_data,
+            'current_page': page_obj.number,
+            'total_pages': paginator.num_pages,
+            'total_items': paginator.count,
+            'has_next': page_obj.has_next(),
+            'has_previous': page_obj.has_previous(),
+        })
     else:
         return JsonResponse({'error': '仅支持 GET 请求'}, status=405)
 
 
-@csrf_exempt
+
 def update_appeal_status(request, appeal_id):
     if request.method == 'PUT':
         try:

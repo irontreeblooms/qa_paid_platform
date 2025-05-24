@@ -119,7 +119,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import axios, {request} from 'axios'
+import axios from 'axios'
 import {
   ElMessage,
   ElIcon
@@ -129,8 +129,6 @@ import {
   User,
   FolderOpened,
   SwitchButton,
-  ChatDotRound,
-  View
 } from '@element-plus/icons-vue'
 import Cookies from 'js-cookie';
 

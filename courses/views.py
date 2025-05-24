@@ -12,7 +12,7 @@ from courses.serializers import CourseSerializer
 from django.core.paginator import Paginator
 from django.db.models import Q
 
-@method_decorator(csrf_exempt, name='dispatch')
+
 class CourseView(View):
     def get(self, request):
         """获取课程列表（支持分页 + 搜索）"""
@@ -60,7 +60,7 @@ class CourseView(View):
         return JsonResponse({"message": "上传成功", "course_id": course.id, "video_url": course.video.url}, status=201)
 
 
-@csrf_exempt
+
 def purchase(request):
     """购买课程"""
     try:
@@ -114,7 +114,7 @@ def purchase(request):
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)
 
-@csrf_exempt
+
 def CourseDetail(request,course_id):
 
     course = Course.objects.filter(id = course_id)
@@ -123,7 +123,7 @@ def CourseDetail(request,course_id):
     return JsonResponse(data, safe=False)
 
 
-@csrf_exempt
+
 def revoke_course(request):
     if request.method == 'POST':
         try:
@@ -142,7 +142,7 @@ def revoke_course(request):
     return JsonResponse({'success': False, 'message': '仅支持 POST 请求'}, status=405)
 
 
-@csrf_exempt
+
 def republish_course(request):
     """重新发布课程"""
     if request.method == 'POST':

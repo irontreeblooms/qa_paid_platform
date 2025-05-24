@@ -15,7 +15,6 @@ from users.models import User
 from payments.models import Transaction
 from django.db.models import Q
 
-@method_decorator(csrf_exempt, name='dispatch')
 class QuestionListView(View):
     def get(self, request):
         """获取问题列表（支持分页 + 搜索）"""
@@ -66,7 +65,7 @@ class QuestionListView(View):
             return JsonResponse(serializer.errors, status=401)
 
 
-@method_decorator(csrf_exempt, name='dispatch')
+
 class QuestionDetailView(View):
     def get(self, request, pk):
         """获取问题详情"""
@@ -101,7 +100,7 @@ class QuestionDetailView(View):
         return JsonResponse({'message': '问题已成功删除'}, status=204)
 
 
-@method_decorator(csrf_exempt, name='dispatch')
+
 class AnswerView(View):
     def get(self, request, question_id):
         """获取某个问题下的所有回答"""
@@ -152,7 +151,7 @@ class AnswerView(View):
         return JsonResponse(serializer.errors, status=400)
 
 
-@csrf_exempt
+
 def accept_answer(request):
     if request.method == 'POST':
         try:
@@ -192,7 +191,7 @@ def accept_answer(request):
         return JsonResponse({'error': 'Invalid request method'}, status=405)
 
 
-@csrf_exempt
+
 def reject_answer(request):
     if request.method == 'POST':
         try:
@@ -217,7 +216,7 @@ def reject_answer(request):
 
 
 
-@csrf_exempt
+
 def create_appeal(request):
     if request.method == 'POST':
         try:

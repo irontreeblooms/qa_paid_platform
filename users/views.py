@@ -17,7 +17,6 @@ from django.core.mail import send_mail
 from django.conf import settings
 
 
-@csrf_exempt
 def user_login(request):
     if request.method == "POST":
 
@@ -40,15 +39,6 @@ def user_login(request):
 
 @csrf_exempt
 def Admin_login(request):
-    if request.method == "OPTIONS":
-        # 处理 CORS 预检请求
-        response = JsonResponse({"message": "CORS preflight successful"})
-        response["Access-Control-Allow-Origin"] = "http://localhost:8080"  # 允许的前端地址
-        response["Access-Control-Allow-Methods"] = "POST, OPTIONS"
-        response["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
-        response["Access-Control-Allow-Credentials"] = "true"
-        return response
-
     if request.method == "POST":
         data = json.loads(request.body)  # 解析 JSON 数据
         username = data.get("username")
@@ -66,10 +56,8 @@ def Admin_login(request):
 
 
 
-@csrf_exempt
 @login_required
 def logout(request):
-
     if request.method == "POST":
         sessionid = request.COOKIES.get('sessionid')  # 获取当前请求的 sessionid
         response = HttpResponse("Logout successful")
@@ -99,7 +87,6 @@ def user_detail(request):
 
 
 # 通用修改用户信息的 API
-@csrf_exempt
 @login_required
 def edit_user_info(request):
     """ 修改用户信息（支持昵称、简介、地址、行业、性别） """
@@ -167,7 +154,6 @@ def my_questions(request):
 
 
 #发送验证码
-@method_decorator(csrf_exempt, name='dispatch')
 class SendCodeView(View):
     def post(self, request):
         try:
@@ -196,7 +182,6 @@ class SendCodeView(View):
 
 
 #注册用户
-@method_decorator(csrf_exempt, name='dispatch')
 class RegisterView(View):
     def post(self, request):
         try:

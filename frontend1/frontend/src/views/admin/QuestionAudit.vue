@@ -27,6 +27,13 @@
       </tbody>
     </table>
 
+    <div class="pagination">
+      <button :disabled="currentPage === 1" @click="changePage(currentPage - 1)">上一页</button>
+      <span>第 {{ currentPage }} 页 / 共 {{ totalPages }} 页</span>
+      <button :disabled="currentPage === totalPages" @click="changePage(currentPage + 1)">下一页</button>
+    </div>
+
+
     <!-- 问题详情弹窗 -->
     <el-dialog v-model="dialogVisible" title="问题详情" width="700px" :close-on-click-modal="false" center>
       <div v-if="questionDetail" class="dialog-content">
@@ -58,18 +65,23 @@ export default {
     return {
       questions: [],
       dialogVisible: false,
-      questionDetail: null
+      questionDetail: null,
+      currentPage: 1,
+      totalPages: 1
     }
   },
   methods: {
-    async fetchQuestions() {
+    async fetchQuestions(page = 1) {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/admin/questions/')
+        const response = await axios.get(`http://127.0.0.1:8000/api/admin/questions/?page=${page}`)
         this.questions = response.data.questions
+        this.currentPage = response.data.current_page
+        this.totalPages = response.data.total_pages
       } catch (error) {
         console.error('获取问题失败:', error)
       }
     },
+
     async approveQuestion(questionId) {
       await this.updateQuestionStatus(questionId, 'open')
     },
@@ -107,12 +119,19 @@ export default {
         hour: '2-digit',
         minute: '2-digit'
       })
-    }
+    },
+    changePage(page) {
+    this.fetchQuestions(page)
+  }
   },
+
   mounted() {
     this.fetchQuestions()
   }
+
+
 }
+
 </script>
 
 <style scoped>
@@ -155,4 +174,26 @@ export default {
   line-height: 1.6;
   color: #555;
 }
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+.pagination button {
+  padding: 5px 12px;
+  background-color: #409eff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
 </style>

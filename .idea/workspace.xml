@@ -6,8 +6,17 @@
   <component name="ChangeListManager">
     <list default="true" id="57fedd76-88f0-4418-8057-1b958ec108d3" name="Changes" comment="Changes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/admin/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/courses/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/courses/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/djangoProject2/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/djangoProject2/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend1/frontend/src/views/Home.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend1/frontend/src/views/Home.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend1/frontend/src/views/admin/AnswerAudit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend1/frontend/src/views/admin/AnswerAudit.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend1/frontend/src/views/admin/AppealAudit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend1/frontend/src/views/admin/AppealAudit.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend1/frontend/src/views/admin/CourseAudit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend1/frontend/src/views/admin/CourseAudit.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend1/frontend/src/views/admin/QuestionAudit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend1/frontend/src/views/admin/QuestionAudit.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend1/frontend/src/views/admin/UserManage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend1/frontend/src/views/admin/UserManage.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/questions/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/questions/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/users/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -277,7 +286,9 @@
       <workItem from="1747627807106" duration="669000" />
       <workItem from="1747673292347" duration="3914000" />
       <workItem from="1747835891658" duration="1104000" />
-      <workItem from="1747980944430" duration="638000" />
+      <workItem from="1747980944430" duration="1446000" />
+      <workItem from="1748057283600" duration="4143000" />
+      <workItem from="1748098436857" duration="5498000" />
     </task>
     <task id="LOCAL-00001" summary="Changes">
       <created>1745130728368</created>
@@ -412,7 +423,14 @@
       <option name="project" value="LOCAL" />
       <updated>1747562327471</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Changes">
+      <created>1747981803096</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1747981803096</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

@@ -29,6 +29,14 @@
       </tbody>
     </table>
 
+    <!-- 分页组件 -->
+    <div class="pagination">
+      <button :disabled="currentPage === 1" @click="changePage(currentPage - 1)">上一页</button>
+      <span>第 {{ currentPage }} 页 / 共 {{ totalPages }} 页</span>
+      <button :disabled="currentPage === totalPages" @click="changePage(currentPage + 1)">下一页</button>
+    </div>
+
+
      <!-- 问题详情弹窗 -->
     <el-dialog v-model="dialogVisible" title="问题详情" width="700px" :close-on-click-modal="false" center>
       <div v-if="questionDetail" class="dialog-content">
@@ -61,14 +69,18 @@ export default {
     return {
       answers: [],
       dialogVisible: false,
-      questionDetail: null
+      questionDetail: null,
+      currentPage: 1,
+      totalPages: 1
     }
   },
   methods: {
-    async fetchAnswers() {
+    async fetchAnswers(page = 1) {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/admin/answers/')
+        const response = await axios.get(`http://127.0.0.1:8000/api/admin/answers/?page=${page}`)
         this.answers = response.data.answers
+        this.currentPage = response.data.current_page
+        this.totalPages = response.data.total_pages
       } catch (error) {
         console.error('获取回答失败:', error)
       }
@@ -110,7 +122,10 @@ export default {
         hour: '2-digit',
         minute: '2-digit'
       })
-    }
+    },
+    changePage(page) {
+    this.fetchAnswers(page)
+  }
   },
   mounted() {
     this.fetchAnswers()
@@ -146,5 +161,27 @@ export default {
 .meta p {
   margin: 6px 0;
   color: #666;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  gap: 10px;
+}
+
+.pagination button {
+  padding: 5px 12px;
+  background-color: #409eff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 </style>
