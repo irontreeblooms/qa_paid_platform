@@ -150,6 +150,15 @@ class AnswerView(View):
         # 返回错误信息
         return JsonResponse(serializer.errors, status=400)
 
+    def delete(self, request, question_id):
+        """删除某个回答"""
+        answer_id = request.GET.get('answerId')
+        try:
+            answer = Answer.objects.get(id=answer_id)
+        except Answer.DoesNotExist:
+            return JsonResponse({"error": "回答不存在"}, status=404)
+        answer.delete()
+        return JsonResponse({"message": "回答已删除"}, status=204)
 
 
 def accept_answer(request):

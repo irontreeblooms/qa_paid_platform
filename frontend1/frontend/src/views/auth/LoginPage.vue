@@ -60,6 +60,11 @@
         还没有账户？
         <router-link to="/register">立即注册</router-link>
       </p>
+
+      <p class="login-footer">
+        忘记密码？
+        <router-link to="/register">找回密码</router-link>
+      </p>
     </el-card>
   </div>
 </template>

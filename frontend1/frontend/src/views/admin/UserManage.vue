@@ -1,16 +1,17 @@
 <template>
   <div>
     <h2 class="text-center">用户管理</h2>
-
-    <!-- 搜索框 -->
-    <div class="search-bar">
-      <input
-        v-model="searchQuery"
-        type="text"
-        placeholder="搜索用户 (用户名或邮箱)"
-        class="search-input"
-      />
-    </div>
+    <div style="text-align: center; margin: 20px 0;">
+  <input
+    v-model="searchKeyword"
+    @keyup.enter="fetchQuestions(1)"
+    placeholder="请输入用户或者邮箱关键词"
+    style="padding: 6px 12px; border: 1px solid #ccc; border-radius: 4px; width: 200px;"
+  />
+  <button @click="fetchUsers(1)" class="btn btn-primary" style="margin-left: 10px;">
+    搜索
+  </button>
+</div>
 
     <table class="table">
       <thead>
@@ -24,7 +25,7 @@
       </thead>
       <tbody>
         <!-- 过滤后的用户列表 -->
-        <tr v-for="user in filteredUsers" :key="user.id">
+        <tr v-for="user in users" :key="user.id">
           <td style="text-align: center;">
             <a href="#" @click="showDetails(user)">{{ user.id }}</a>
           </td>
@@ -32,7 +33,7 @@
           <td style="text-align: center;">{{ user.email }}</td>
           <td style="text-align: center;">{{ user.is_banned ? '封禁' : '未封禁' }}</td>
           <td style="text-align: center;">
-            <button @click="toggleBan(user)" class="btn btn-primary">
+            <button @click="toggleBan(user)" class="btn btn-danger">
               {{ user.is_banned ? '封禁用户' : '解封用户' }}
             </button>
           </td>
@@ -67,26 +68,19 @@ export default {
   data() {
     return {
       users: [],
-      searchQuery: '', // 搜索关键字
       selectedUser: null // 当前选中的用户
     };
   },
-  computed: {
-    filteredUsers() {
-      // 根据搜索关键字筛选用户
-      return this.users.filter(user => {
-        const query = this.searchQuery.toLowerCase();
-        return (
-          user.username.toLowerCase().includes(query) ||
-          user.email.toLowerCase().includes(query)
-        );
-      });
-    }
-  },
+
   methods: {
     async fetchUsers(page = 1) {
       try {
-        const response = await axios.get(`http://127.0.0.1:8000/api/admin/users/?page=${page}`);
+        const response = await axios.get(`http://127.0.0.1:8000/api/admin/users/`,{
+      params: {
+          page: page,
+          search: this.searchKeyword
+        }
+        });
         this.users = response.data.users
         this.currentPage = response.data.current_page
         this.totalPages = response.data.total_pages
@@ -203,4 +197,26 @@ export default {
   background-color: #ccc;
   cursor: not-allowed;
 }
+.btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+}
+/* 拒绝按钮：红色 */
+.btn-danger {
+  background-color: #f56c6c;
+}
+
+.btn-danger:hover {
+  background-color: #dd6161;
+}
+.btn-primary {
+  background-color: #67c23a;
+}
+.btn-primary:hover {
+  background-color: #5daf34;
+}
+
 </style>

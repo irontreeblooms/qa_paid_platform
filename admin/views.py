@@ -13,6 +13,7 @@ from django.utils.timezone import now
 from payments.models import Transaction
 from django.core.paginator import Paginator, EmptyPage
 from rest_framework.views import APIView
+from django.db.models import Q
 
 # 管理员权限检查
 def is_admin(user):
@@ -166,15 +167,37 @@ class AuditCourseView(View):
             return JsonResponse({'message': '审核成功', 'status': course.status}, status=200)
         except json.JSONDecodeError:
             return JsonResponse({'error': '请求格式错误'}, status=400)
+    def delete(self, request):
+        """删除指定课程"""
+        try:
+            data = json.loads(request.body)
+            course_id = data.get('course_id')
+            if not course_id:
+                return JsonResponse({'error': '缺少 course_id'}, status=400)
 
+            course = get_object_or_404(Course, id=course_id)
+            course.delete()
+
+            return JsonResponse({'message': '课程删除成功'}, status=200)
+        except json.JSONDecodeError:
+            return JsonResponse({'error': '请求格式错误'}, status=400)
 
 class ManageUserView(View):
     """管理用户"""
 
     def get(self, request):
-        users = User.objects.all().order_by('id')  # 按id排序
+        search = request.GET.get('search', '')  # 获取搜索关键词
         page = request.GET.get('page', 1)
         page_size = request.GET.get('page_size', 10)
+
+        # 如果提供关键词，就做模糊匹配（用户名、邮箱等字段）
+        if search:
+            users = User.objects.filter(
+                Q(username__icontains=search) |
+                Q(email__icontains=search)
+            ).order_by('id')
+        else:
+            users = User.objects.all().order_by('id')
 
         paginator = Paginator(users, page_size)
         try:

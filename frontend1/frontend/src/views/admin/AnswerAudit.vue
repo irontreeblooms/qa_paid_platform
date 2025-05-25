@@ -184,4 +184,30 @@ export default {
   background-color: #ccc;
   cursor: not-allowed;
 }
+.btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* 通过按钮：绿色 */
+.btn-success {
+  background-color: #67c23a;
+}
+
+.btn-success:hover {
+  background-color: #5daf34;
+}
+
+/* 拒绝按钮：红色 */
+.btn-danger {
+  background-color: #f56c6c;
+}
+
+.btn-danger:hover {
+  background-color: #dd6161;
+}
+
 </style>

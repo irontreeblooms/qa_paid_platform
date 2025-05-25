@@ -11,7 +11,7 @@ from django.db.models import F
 from courses.serializers import CourseSerializer
 from django.core.paginator import Paginator
 from django.db.models import Q
-
+from django.shortcuts import get_object_or_404
 
 class CourseView(View):
     def get(self, request):
@@ -59,6 +59,16 @@ class CourseView(View):
         course = Course.objects.create(title=title, description=description, price=price, video=video, author=request.user,cover=cover)
         return JsonResponse({"message": "上传成功", "course_id": course.id, "video_url": course.video.url}, status=201)
 
+    def delete(self, request):
+        """删除课程"""
+        try:
+            data = json.loads(request.body)
+            course_id = data.get('course_id')
+            course = get_object_or_404(Course, id=course_id)
+            course.delete()
+            return JsonResponse({'message': '删除成功'}, status=200)
+        except json.JSONDecodeError:
+            return JsonResponse({'error': '请求数据格式错误'}, status=400)
 
 
 def purchase(request):

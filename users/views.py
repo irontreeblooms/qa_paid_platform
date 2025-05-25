@@ -59,6 +59,7 @@ def Admin_login(request):
 @login_required
 def logout(request):
     if request.method == "POST":
+
         sessionid = request.COOKIES.get('sessionid')  # 获取当前请求的 sessionid
         response = HttpResponse("Logout successful")
         response.delete_cookie(sessionid)  # 删除cookie
