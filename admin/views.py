@@ -20,7 +20,7 @@ def is_admin(user):
     return user.is_authenticated and user.is_admin
 
 
-class AuditQuestionView(APIView):
+class AuditQuestionView(View):
     """审核问题"""
 
     def get(self, request):
@@ -36,7 +36,6 @@ class AuditQuestionView(APIView):
         })
 
     def post(self, request):
-        """审核通过或拒绝问题"""
         try:
             data = json.loads(request.body)  # 解析 JSON 数据
             question_id = data.get('question_id')
@@ -72,8 +71,9 @@ class AuditQuestionView(APIView):
 
 
 
-class AuditAnswerView(APIView):
+class AuditAnswerView(View):
     """审核回答"""
+
 
     def get(self, request):
         """分页获取待审核的回答"""
@@ -101,6 +101,7 @@ class AuditAnswerView(APIView):
         }, status=200)
 
     def post(self, request):
+
         """审核回答（通过/拒绝）"""
         try:
             data = json.loads(request.body)
@@ -124,6 +125,7 @@ class AuditCourseView(View):
     """审核课程"""
 
     def get(self, request):
+
         """获取所有待审核的课程，支持分页"""
         page = request.GET.get('page', 1)  # 从请求参数中获取页码，默认第1页
         page_size = request.GET.get('page_size', 10)  # 每页条数，默认10

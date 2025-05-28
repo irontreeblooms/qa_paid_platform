@@ -31,5 +31,6 @@ urlpatterns = [
     path('send-code/', views.SendCodeView.as_view()),
     path('register/', views.RegisterView.as_view()),
     path('myanswers/', views.my_answers),
+    path('reset-password/', views.ResetPasswordView.as_view(), name='reset-password'),
     path('text/', views.text),
 ]

@@ -7,15 +7,12 @@
     <list default="true" id="57fedd76-88f0-4418-8057-1b958ec108d3" name="Changes" comment="Changes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/admin/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/admin/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/courses/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/courses/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/courses/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/courses/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend1/frontend/src/views/admin/AnswerAudit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend1/frontend/src/views/admin/AnswerAudit.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend1/frontend/src/views/admin/AppealAudit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend1/frontend/src/views/admin/AppealAudit.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend1/frontend/src/views/admin/CourseAudit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend1/frontend/src/views/admin/CourseAudit.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend1/frontend/src/views/admin/QuestionAudit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend1/frontend/src/views/admin/QuestionAudit.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend1/frontend/src/views/admin/UserManage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend1/frontend/src/views/admin/UserManage.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend1/frontend/src/views/admin/admin.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend1/frontend/src/views/admin/admin.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend1/frontend/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend1/frontend/src/router/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend1/frontend/src/views/auth/LoginPage.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend1/frontend/src/views/auth/LoginPage.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/questions/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/questions/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend1/frontend/src/views/user/MyResources.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend1/frontend/src/views/user/MyResources.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/users/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/users/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/users/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -83,7 +80,7 @@
       <recent name="C:\Users\SY2\PycharmProjects\djangoProject2\frontend\frontend\src\pages" />
     </key>
   </component>
-  <component name="RunManager" selected="npm.serve">
+  <component name="RunManager" selected="Django 服务器.djangoProject2">
     <configuration name="1" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="djangoProject2" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -291,7 +288,11 @@
       <workItem from="1747980944430" duration="1446000" />
       <workItem from="1748057283600" duration="4143000" />
       <workItem from="1748098436857" duration="6777000" />
-      <workItem from="1748140111850" duration="14799000" />
+      <workItem from="1748140111850" duration="19229000" />
+      <workItem from="1748170547096" duration="753000" />
+      <workItem from="1748224674136" duration="1447000" />
+      <workItem from="1748241586873" duration="13000" />
+      <workItem from="1748258940557" duration="1597000" />
     </task>
     <task id="LOCAL-00001" summary="Changes">
       <created>1745130728368</created>
@@ -440,7 +441,14 @@
       <option name="project" value="LOCAL" />
       <updated>1748104546180</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="Changes">
+      <created>1748158830194</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1748158830194</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

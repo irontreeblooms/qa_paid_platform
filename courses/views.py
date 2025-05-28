@@ -1,10 +1,7 @@
 import json
 from django.http import JsonResponse
-from django.utils.decorators import method_decorator
 from django.views import View
 from .models import Course
-from django.core.files.storage import default_storage
-from django.views.decorators.csrf import csrf_exempt
 from users.models import User, PurchaseRecord
 from payments.models import Transaction
 from django.db.models import F
@@ -12,6 +9,10 @@ from courses.serializers import CourseSerializer
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
+from django.http import FileResponse, Http404
+from django.conf import settings
+import os
+from urllib.parse import unquote
 
 class CourseView(View):
     def get(self, request):
@@ -183,3 +184,17 @@ def republish_course(request):
             return JsonResponse({'success': False, 'message': str(e)}, status=500)
 
     return JsonResponse({'success': False, 'message': '仅支持 POST 请求'}, status=405)
+
+
+def download_video(request, path):
+    # 手动解码一次
+    path = unquote(path)
+    path = path.rstrip('/\\')
+    file_path = os.path.join(settings.MEDIA_ROOT, path)
+    if not os.path.exists(file_path):
+        print("文件不存在：", file_path)
+        raise Http404("文件不存在")
+    response = FileResponse(open(file_path, 'rb'))
+    response['Content-Type'] = 'application/octet-stream'
+    response['Content-Disposition'] = f'attachment; filename="{os.path.basename(file_path)}"'
+    return response

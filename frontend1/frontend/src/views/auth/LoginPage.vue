@@ -63,7 +63,7 @@
 
       <p class="login-footer">
         忘记密码？
-        <router-link to="/register">找回密码</router-link>
+        <router-link to="/forgot-password">找回密码</router-link>
       </p>
     </el-card>
   </div>

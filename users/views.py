@@ -1,11 +1,7 @@
-import datetime
 from django.contrib.sessions.models import Session
-from django.utils.decorators import method_decorator
 from django.views import View
-import jwt
 from questions.models import Question, Answer
 from users.models import PurchaseRecord, User
-from django.shortcuts import redirect
 from django.contrib.auth import authenticate, login
 from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -15,6 +11,7 @@ import random
 from django.core.cache import cache
 from django.core.mail import send_mail
 from django.conf import settings
+from django.contrib.auth.hashers import make_password
 
 
 def user_login(request):
@@ -45,7 +42,7 @@ def Admin_login(request):
         password = data.get("password")
 
         user = authenticate(username=username, password=password)  # 验证用户
-        if user is not None:
+        if user is not None and user.is_superuser:
             login(request, user)  # 登录用户
 
             return JsonResponse({'code': 200, 'info': '登陆成功'})
@@ -255,6 +252,33 @@ def my_answers(request):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
+
+class ResetPasswordView(View):
+    def post(self, request):
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "无效的 JSON 数据"}, status=400)
+
+        email = data.get("email")
+        code = data.get("code")
+        new_password = data.get("new_password")
+
+        if not all([email, code, new_password]):
+            return JsonResponse({"error": "请填写所有字段"}, status=400)
+
+        cached_code = cache.get(f'register_code_{email}')
+        if cached_code != code:
+            return JsonResponse({"error": "验证码错误或已过期"}, status=400)
+
+        try:
+            user = User.objects.get(email=email)
+            user.password = make_password(new_password)
+            user.save()
+            cache.delete(f'register_code_{email}')
+            return JsonResponse({"message": "密码重置成功"})
+        except User.DoesNotExist:
+            return JsonResponse({"error": "用户不存在"}, status=404)
 
 def text(request):
     if request.method == "GET":

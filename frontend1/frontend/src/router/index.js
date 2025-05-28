@@ -12,6 +12,7 @@ const routes = [
   { path: '/questiondetail/:id', name: 'questiondetail', component: () => import('../views/question/Detail') },
   { path: '/coursedetail/:id', name: 'coursedetail', component: () => import('../views/course/coursedetail') },
   { path: '/register', name: 'register', component: () => import('../views/auth/Register') },
+  { path: '/forgot-password', name: 'ForgotPassword', component: () => import('@/views/auth/ForgotPassword.vue')},
 ];
 
 const router = createRouter({

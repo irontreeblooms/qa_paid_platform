@@ -111,7 +111,14 @@
           controls
           class="course-video"
         />
-
+      <el-button
+      v-if="courseDetail.video"
+      type="primary"
+      style="margin-top: 16px"
+      @click="downloadVideo"
+    >
+      下载视频
+    </el-button>
       </template>
       <template #footer>
         <el-button @click="courseDialogVisible = false">返回</el-button>
@@ -431,7 +438,21 @@ function rejectAnswer(answer) {
       ElMessage.error('拒绝回答失败，请稍后重试');
     });
 }
-
+function downloadVideo() {
+  if (!courseDetail.value.video) return;
+  // 移除 "/media/" 前缀
+  const serverPath = courseDetail.value.video.replace(/^\/media\//, '');
+  const url = 'http://127.0.0.1:8000/api/courses/download/video/' + encodeURIComponent(serverPath);
+  // 直接跳转即可，后端会弹出下载
+  const a = document.createElement('a');
+  a.href = url;
+  a.target = '_blank';
+  // download属性对带Content-Disposition的接口可有可无
+  a.download = serverPath.split('/').pop() || 'video.mp4';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
 </script>
 
 <style scoped>

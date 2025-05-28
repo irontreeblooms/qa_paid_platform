@@ -29,6 +29,7 @@ urlpatterns = [
     path('detail/<int:course_id>/', courses.views.CourseDetail),
     path('revoke/', courses.views.revoke_course),
     path('republish/', courses.views.republish_course),
+    path('download/video/<path:path>', courses.views.download_video, name='download_video'),
 ]
 
 # 允许访问媒体文件
