@@ -72,7 +72,7 @@
       <recent name="C:\Users\SY2\PycharmProjects\djangoProject2\frontend\frontend\src\pages" />
     </key>
   </component>
-  <component name="RunManager" selected="Django 服务器.djangoProject2">
+  <component name="RunManager" selected="npm.serve">
     <configuration name="1" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="djangoProject2" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -291,6 +291,7 @@
       <workItem from="1750050671517" duration="16000" />
       <workItem from="1750050876721" duration="144000" />
       <workItem from="1750051704387" duration="9000" />
+      <workItem from="1750052067825" duration="857000" />
     </task>
     <task id="LOCAL-00001" summary="Changes">
       <created>1745130728368</created>
@@ -460,7 +461,21 @@
       <option name="project" value="LOCAL" />
       <updated>1750050897154</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="Changes">
+      <created>1750052101966</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1750052101966</updated>
+    </task>
+    <task id="LOCAL-00026" summary="Changes">
+      <created>1750052190886</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1750052190886</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

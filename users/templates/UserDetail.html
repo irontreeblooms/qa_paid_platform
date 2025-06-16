@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>个人资料</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            margin: 40px;
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 25px;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px;
+            margin: 8px 0;
+            background: #f4f6f7;
+            border-radius: 5px;
+            transition: all 0.2s;
+        }
+        li:hover {
+            transform: translateX(10px);
+            background: #e8f4fc;
+        }
+        .field-count {
+            color: #7f8c8d;
+            margin-bottom: 20px;
+        }
+        .edit-btn {
+            background: rgba(52, 152, 219, 0.1);
+            color: #3498db;
+            border: 1px solid rgba(52, 152, 219, 0.3);
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .edit-btn:hover {
+            background: #3498db;
+            color: white;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>个人资料</h2>
+
+        <ul>
+            <li>
+                <span>昵称:</span>
+                <div>
+                    {{ user.nickname }}
+                </div>
+                <button class="edit-btn" id="nickname_editButton">修改</button>
+
+                <script>
+                    document.getElementById('nickname_editButton').addEventListener('click', function() {
+                     window.location.href = 'detail/{{ user.id }}/nickname_edit';
+                 });
+                </script>
+            </li>
+            <li>
+                <span>性别:</span>
+                <div>
+                    {{ user.gender }}
+                </div>
+                <button class="edit-btn" id="gender_editButton">修改</button>
+
+                <script>
+                    document.getElementById('gender_editButton').addEventListener('click', function() {
+                     window.location.href = 'detail/{{ user.id }}/gender_edit';
+                 });
+                </script>
+            </li>
+            <li>
+                <span>个人介绍:</span>
+                <div>
+                        {{ user.bio }}
+                </div>
+                <button class="edit-btn" id="bio_editButton">修改</button>
+
+                <script>
+                    document.getElementById('bio_editButton').addEventListener('click', function() {
+                     window.location.href = 'detail/{{ user.id }}/bio_edit';
+                 });
+                </script>
+            </li>
+            <li>
+                <span>居住地:</span>
+                <div>
+                    {{ user.address }}
+                </div>
+                <button class="edit-btn" id="address_editButton">修改</button>
+
+                <script>
+                    document.getElementById('address_editButton').addEventListener('click', function() {
+                     window.location.href = 'detail/{{ user.id }}/address_edit';
+                 });
+                </script>
+            </li>
+            <li>
+                <span>所在行业:</span>
+                <div>
+                    {{ user.industry }}
+                </div>
+                <button class="edit-btn" id="industry_editButton">修改</button>
+
+                <script>
+                    document.getElementById('industry_editButton').addEventListener('click', function() {
+                     window.location.href = 'detail/{{ user.id }}/industry_edit';
+                 });
+                </script>
+            </li>
+            <li>
+                <span>个人认证:</span>
+                <button class="edit-btn">修改</button>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>
